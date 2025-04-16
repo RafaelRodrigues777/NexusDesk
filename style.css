@@ -1,0 +1,94 @@
+t* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #007bff;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.resumo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 30%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.grafico {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.atalhos {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.botao {
+    display: block;
+    padding: 15px;
+    background: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 30%;
+}
+
+.botao:hover {
+    background: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .resumo {
+        flex-direction: column;
+    }
+    .card, .botao {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .atalhos {
+        flex-direction: column;
+    }
+}

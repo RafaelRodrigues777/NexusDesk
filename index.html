@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | NexuDesk</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h1>NexuDesk</h1>
+            <nav>
+                <a href="#">Dashboard</a>
+                <a href="#">Abrir Chamado</a>
+                <a href="#">Meus Chamados</a>
+                <a href="#">Relatórios</a>
+                <a href="#">Sair</a>
+            </nav>
+        </aside>
+        
+        <!-- Conteúdo Principal -->
+        <main class="content">
+            <h2>Dashboard</h2>
+            
+            <!-- Cards de Resumo -->
+            <div class="cards">
+                <div class="card">
+                    <h3>Chamados Abertos</h3>
+                    <p>12</p>
+                </div>
+                <div class="card">
+                    <h3>Em Andamento</h3>
+                    <p>5</p>
+                </div>
+                <div class="card">
+                    <h3>Fechados</h3>
+                    <p>20</p>
+                </div>
+            </div>
+            
+            <!-- Gráfico -->
+            <div class="grafico">
+                <h3>Estatísticas</h3>
+                <canvas id="chamadosChart"></canvas>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

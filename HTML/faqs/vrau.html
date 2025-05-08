@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoPrime - Sua Nova Concessionária</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-blue-600">AutoPrime</h1>
+        <nav class="space-x-6">
+          <a href="#inicio" class="hover:text-blue-600">Início</a>
+          <a href="#estoque" class="hover:text-blue-600">Estoque</a>
+          <a href="#sobre" class="hover:text-blue-600">Sobre</a>
+          <a href="#contato" class="hover:text-blue-600">Contato</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="inicio" class="bg-blue-600 text-white py-20">
+      <div class="max-w-5xl mx-auto text-center px-4">
+        <h2 class="text-4xl font-bold mb-4">Encontre o carro dos seus sonhos</h2>
+        <p class="text-lg mb-6">A melhor seleção de carros novos e seminovos</p>
+        <a href="#estoque" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded shadow hover:bg-gray-200">Ver Estoque</a>
+      </div>
+    </section>
+
+    <!-- Destaques -->
+    <section id="estoque" class="py-16 bg-gray-100">
+      <div class="max-w-7xl mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-12">Destaques da Semana</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white shadow rounded-xl overflow-hidden">
+            <img src="https://via.placeholder.com/400x200" alt="Carro 1" class="w-full h-48 object-cover" />
+            <div class="p-4">
+              <h4 class="font-bold text-xl">Toyota Corolla 2020</h4>
+              <p class="text-blue-600 font-semibold">R$ 89.900</p>
+              <a href="#" class="text-blue-600 mt-2 inline-block hover:underline">Ver mais</a>
+            </div>
+          </div>
+          <div class="bg-white shadow rounded-xl overflow-hidden">
+            <img src="https://via.placeholder.com/400x200" alt="Carro 2" class="w-full h-48 object-cover" />
+            <div class="p-4">
+              <h4 class="font-bold text-xl">Honda Civic 2021</h4>
+              <p class="text-blue-600 font-semibold">R$ 104.500</p>
+              <a href="#" class="text-blue-600 mt-2 inline-block hover:underline">Ver mais</a>
+            </div>
+          </div>
+          <div class="bg-white shadow rounded-xl overflow-hidden">
+            <img src="https://via.placeholder.com/400x200" alt="Carro 3" class="w-full h-48 object-cover" />
+            <div class="p-4">
+              <h4 class="font-bold text-xl">Jeep Renegade 2022</h4>
+              <p class="text-blue-600 font-semibold">R$ 114.900</p>
+              <a href="#" class="text-blue-600 mt-2 inline-block hover:underline">Ver mais</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="py-16 bg-white">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <h3 class="text-3xl font-bold mb-4">Sobre a AutoPrime</h3>
+        <p class="text-lg leading-relaxed">
+          Com mais de 10 anos no mercado, a AutoPrime oferece veículos com qualidade e procedência. Nossa equipe está pronta para te ajudar a realizar o sonho do carro próprio com segurança e confiança.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="py-16 bg-gray-100">
+      <div class="max-w-xl mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-6">Entre em Contato</h3>
+        <form class="bg-white p-6 rounded shadow space-y-4">
+          <input type="text" placeholder="Seu nome" class="w-full border border-gray-300 rounded px-4 py-2" />
+          <input type="email" placeholder="Seu e-mail" class="w-full border border-gray-300 rounded px-4 py-2" />
+          <textarea placeholder="Sua mensagem" class="w-full border border-gray-300 rounded px-4 py-2 h-32"></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700">Enviar Mensagem</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white text-center py-6 border-t">
+      <p class="text-gray-600">© 2025 AutoPrime. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>

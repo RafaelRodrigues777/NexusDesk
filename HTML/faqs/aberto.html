@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abrir Chamado - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #0a0a0a;
+      --surface: #121212;
+      --accent: #00aaff;
+      --accent-hover: #008ecc;
+      --text: #eaeaea;
+      --subtext: #888888;
+      --border: #2a2a2a;
+      --radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--background);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: var(--surface);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+    }
+
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .sidebar nav a {
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius: var(--radius);
+      text-align: left;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .sidebar nav a:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sidebar .logout {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 0.8rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .sidebar .logout:hover {
+      background: var(--accent-hover);
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-header {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-header .logo-placeholder,
+    .form-header .tipo-chamado {
+      flex: 1;
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-align: center;
+      color: var(--subtext);
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--subtext);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .form-group textarea {
+      resize: none;
+      height: 150px;
+    }
+
+    .form-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+      align-items: center;
+    }
+
+    .form-footer .button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex: 1;
+    }
+
+    .form-footer .button:hover {
+      background: var(--accent-hover);
+    }
+
+    .form-footer select {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      font-size: 1rem;
+      flex: 1;
+    }
+
+    .form-footer select:focus {
+      border-color: var(--accent);
+    }
+
+    #mensagem-enviada {
+      margin-top: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      display: none;
+    }
+
+    #confirmacao-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #confirmacao-modal .modal-content {
+      background-color: var(--surface);
+      padding: 2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      width: 300px;
+    }
+
+    #confirmacao-modal .modal-content button {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      transition: background 0.3s;
+      margin-top: 1rem;
+    }
+
+    #confirmacao-modal .modal-content button:hover {
+      background: var(--accent-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div>
+      <div class="logo">4DeskSolutions</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Anúncios</a>
+        <a href="#">FAQs</a>
+        <a href="#">Pesquisa</a>
+      </nav>
+    </div>
+    <div class="logout">Sair</div>
+  </aside>
+
+  <main class="main">
+    <form method="POST" action="">
+      <div class="form-header">
+        <div class="logo-placeholder">Logo</div>
+        <div class="tipo-chamado">Tipo de Chamado</div>
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" name="telefone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="local">Local</label>
+        <input type="text" id="local" name="local" required>
+      </div>
+
+      <div class="form-group">
+        <label for="usuario">Usuário</label>
+        <input type="text" id="usuario" name="usuario" required>
+      </div>
+
+      <div class="form-group">
+        <label for="anexos">Anexos</label>
+        <input type="file" id="anexos" name="anexos">
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" required></textarea>
+      </div>
+
+      <div class="form-footer">
+        <select name="categoria" required>
+          <option value="">Categoria</option>
+          <option value="Hardware">Hardware</option>
+          <option value="Software">Software</option>
+          <option value="Rede">Rede</option>
+          <option value="Impressora">Impressora</option>
+          <option value="Outros">Outros</option>
+        </select>
+
+        <button type="button" class="button" onclick="enviarFormulario()">Enviar</button>
+      </div>
+    </form>
+
+    <p id="mensagem-enviada">Chamado enviado com sucesso!</p>
+  </main>
+
+  <div id="confirmacao-modal">
+    <div class="modal-content">
+      <p>Chamado enviado com sucesso!</p>
+      <button onclick="window.location.href='externo_front.html'">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    function enviarFormulario() {
+      const modal = document.getElementById("confirmacao-modal");
+      modal.style.display = "flex";
+
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, 5000);
+    }
+  </script>
+
+</body>
+</html>

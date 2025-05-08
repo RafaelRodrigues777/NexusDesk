@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs - 4DeskSolutions</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #111;
+      color: #fff;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 2rem;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .sidebar nav a {
+      display: block;
+      background-color: #34495e;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      text-align: center;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar nav a:hover {
+      background-color: #2c3e50;
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .content h1 {
+      font-size: 28px;
+      margin-bottom: 1.5rem;
+      color: #3498db; /* Azul */
+    }
+
+    .faq-item {
+      background-color: #2c3e50;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      background-color: #34495e;
+      font-weight: bold;
+      position: relative;
+      color: #fff;
+    }
+
+    .faq-question::after {
+      content: '+';
+      position: absolute;
+      right: 20px;
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-question::after {
+      content: '-';
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      background-color: #2c3e50;
+      padding: 0 1.5rem;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: #f5f5f5;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 1rem 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 1rem;
+      }
+
+      .sidebar nav a {
+        margin: 0;
+        padding: 0.5rem;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>4DeskSolutions</h2>
+      <nav>
+        <a href="externo_front.html">Home</a>
+        <a href="noticias.html">Anúncios</a>
+        <a href="faqs.html">FAQs</a>
+        <a href="pds1.html">Pesquisa de satisfação</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Perguntas Frequentes</h1>
+
+      <div class="faq-item">
+        <div class="faq-question">Como posso abrir um chamado técnico?</div>
+        <div class="faq-answer">
+          Você pode abrir um chamado acessando a aba "Chamados" no nosso sistema interno e preenchendo o formulário com os detalhes do problema.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Qual o horário de atendimento?</div>
+        <div class="faq-answer">
+          Nosso atendimento funciona de segunda a sexta, das 8h às 18h (exceto feriados nacionais).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Oferecem suporte remoto?</div>
+        <div class="faq-answer">
+          Sim! A maioria dos nossos atendimentos é feita via acesso remoto, garantindo agilidade e segurança na resolução dos chamados.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Como acompanho o status do meu chamado?</div>
+        <div class="faq-answer">
+          Após abrir um chamado, você pode acompanhar o status e atualizações diretamente pelo painel da plataforma, usando seu login.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const faqs = document.querySelectorAll('.faq-item');
+    faqs.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('active');
+        faqs.forEach(other => {
+          if (other !== item) {
+            other.classList.remove('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

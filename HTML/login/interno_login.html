@@ -1,0 +1,98 @@
+<!-- interno_login.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Interno</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .box h2 {
+      text-align: center;
+      color: #fff;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #000;
+      color: #fff;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 6px;
+      background-color: #ff9900;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #e68a00;
+    }
+
+    @media (max-width: 400px) {
+      .box {
+        margin: 0 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Login Interno</h2>
+    <input type="text" placeholder="Usuário Interno" id="usuario" />
+    <input type="password" placeholder="Senha" id="senha" />
+    <button onclick="entrar()">Entrar</button>
+  </div>
+
+  <script>
+    function entrar() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if (usuario && senha) {
+        window.location.href = "interno_chamados.html";
+      } else {
+        alert("Preencha os campos para continuar.");
+      }
+    }
+  </script>
+</body>
+</html>

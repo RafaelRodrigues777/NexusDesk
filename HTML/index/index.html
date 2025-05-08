@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusDesk - Início</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="#" style="text-decoration: none;">
+        <div class="logo-text">
+          <span class="first">4desk</span><span class="second">Solutions</span>
+        </div>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#">Início</a></li>
+          <li><a href="#">Chamados</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+        <select class="login-select" id="loginSelect">
+          <option selected disabled>Login</option>
+          <option value="externo_login.html">Usuário</option>
+          <option value="interno_login.html">Interno</option>
+        </select>
+      </nav>
+    </header>
+
+    <section class="search-section">
+      <h1>Como podemos te ajudar?</h1>
+      <div class="search-box">
+        <input type="text" placeholder="Descreva seu problema ou dúvida">
+        <button>Buscar</button>
+      </div>
+    </section>
+
+    <section class="quick-links">
+      <a href="#">Abrir Chamado</a>
+      <a href="#">Área Interna</a>
+      <a href="#">Base de Conhecimento</a>
+      <a href="#">Status do Sistema</a>
+    </section>
+
+    <section class="support-info">
+      <div class="support-content">
+        <div class="support-image">
+          <img src="ChatGPT Image Apr 8, 2025, 11_31_24 PM.png" alt="Imagem de Suporte">
+        </div>
+        <div class="support-text">
+          <h2>Nossa missão,<br>SOBRE SUPORTE</h2>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div>© 2025 NexusDesk - Todos os direitos reservados</div>
+    <div class="footer-links">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Ajuda</a>
+    </div>
+  </footer>
+
+  <script src="index.js"></script>
+  <script>
+    // JavaScript para redirecionar ao selecionar uma opção no dropdown
+    document.getElementById('loginSelect').addEventListener('change', function () {
+      const selectedValue = this.value;
+      if (selectedValue) {
+        window.location.href = selectedValue; // Redireciona para o arquivo selecionado
+      }
+    });
+  </script>
+</body>
+</html>

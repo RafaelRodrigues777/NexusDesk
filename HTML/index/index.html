@@ -1,78 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NexusDesk - Início</title>
-  <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>4DeskSolutions - Suporte Técnico</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <a href="#" style="text-decoration: none;">
-        <div class="logo-text">
-          <span class="first">4desk</span><span class="second">Solutions</span>
-        </div>
-      </a>
-      <nav>
-        <ul>
-          <li><a href="#">Início</a></li>
-          <li><a href="#">Chamados</a></li>
-          <li><a href="#">Contato</a></li>
-        </ul>
-        <select class="login-select" id="loginSelect">
-          <option selected disabled>Login</option>
-          <option value="externo_login.html">Usuário</option>
-          <option value="interno_login.html">Interno</option>
-        </select>
-      </nav>
-    </header>
+  <header class="header">
+    <div class="logo">4DeskSolutions</div>
+    <nav class="nav" aria-label="Menu principal">
+      <a href="#home">Início</a>
+      <a href="#features">Serviços</a>
+      <a href="#pricing">Planos</a>
+      <a href="#contact">Contato</a>
+    </nav>
+    <a href="../login/externo_login.html">
+      <button class="header-btn" type="button">Acesse o Suporte</button>
+    </a>
+  </header>
 
-    <section class="search-section">
-      <h1>Como podemos te ajudar?</h1>
-      <div class="search-box">
-        <input type="text" placeholder="Descreva seu problema ou dúvida">
-        <button>Buscar</button>
+  <section class="hero" id="home" aria-label="Seção principal de suporte técnico">
+    <h1>
+      Suporte Técnico Ágil e Profissional <br />
+      para Sua Empresa
+    </h1>
+    <p>
+      Resolva problemas de tecnologia de forma rápida<br />
+      e eficiente, com nossa equipe especializada.
+    </p>
+    <button class="hero-btn" type="button">Solicitar Suporte</button>
+  </section>
+
+  <section class="mockup" id="mockup" aria-label="Visualização da aplicação em desktop e celular">
+    <div class="mockup-container">
+      <img
+        class="desktop-img"
+        src="../imgs/assets_task_01jswtxnwvezqav4ga5n6k66km_1745798282_img_0.webp"
+        alt="Tela de Suporte - Computador"
+      />
+      <img
+        class="phone-img"
+        src="../imgs/5f399e48-339e-4355-9ff7-4df16474fb5b.jpeg"
+        alt="Tela de Suporte - Celular"
+      />
+    </div>
+  </section>
+
+  <section aria-label="Parceiros da empresa" class="partners">
+    <h1>Nossos Parceiros</h1>
+    <div class="slider" role="region" aria-roledescription="carousel" aria-label="Logos dos parceiros">
+      <div class="slider-items">
+        <img src="../imgs/mac-os.png" alt="Apple" />
+        <img src="../imgs/openai-white-lockup.png" alt="OpenAI" />
+        <img src="../imgs/html-5.png" alt="HTML5" />
+        <img src="../imgs/css-logo-black-and-white22.png" alt="CSS3" />
+        <img src="../imgs/javascript-logo.png" alt="JavaScript" />
+        <img src="../imgs/microsoft-copilot.png" alt="Microsoft Copilot" />
+        <img src="../imgs/github.png" alt="GitHub" />
+        <img src="../imgs/mac-os.png" alt="Apple" />
+        <img src="../imgs/openai-white-lockup.png" alt="OpenAI" />
+        <img src="../imgs/html-5.png" alt="HTML5" />
+        <img src="../imgs/css-logo-black-and-white22.png" alt="CSS3" />
+        <img src="../imgs/javascript-logo.png" alt="JavaScript" />
+        <img src="../imgs/microsoft-copilot.png" alt="Microsoft Copilot" />
+        <img src="../imgs/github.png" alt="GitHub" />
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="quick-links">
-      <a href="#">Abrir Chamado</a>
-      <a href="#">Área Interna</a>
-      <a href="#">Base de Conhecimento</a>
-      <a href="#">Status do Sistema</a>
-    </section>
-
-    <section class="support-info">
-      <div class="support-content">
-        <div class="support-image">
-          <img src="ChatGPT Image Apr 8, 2025, 11_31_24 PM.png" alt="Imagem de Suporte">
-        </div>
-        <div class="support-text">
-          <h2>Nossa missão,<br>SOBRE SUPORTE</h2>
-        </div>
+  <section class="features" id="features" aria-label="Principais características e serviços">
+    <div class="feature">
+      <div class="feature-image">
+        <img src="../imgs/mac-os.png" alt="Ícone de Atendimento Rápido" />
       </div>
-    </section>
-  </div>
+      <div class="feature-text">
+        <h2>Atendimento Rápido</h2>
+        <p>
+          Receba respostas e soluções rápidas, minimizando o tempo de inatividade e garantindo que sua empresa continue funcionando sem interrupções. Nosso suporte ágil resolve problemas em tempo recorde.
+        </p>
+      </div>
+    </div>
 
-  <footer>
-    <div>© 2025 NexusDesk - Todos os direitos reservados</div>
-    <div class="footer-links">
-      <a href="#">Política de Privacidade</a>
-      <a href="#">Termos de Uso</a>
-      <a href="#">Ajuda</a>
+    <div class="feature">
+      <div class="feature-image">
+        <img src="../imgs/mac-os.png" alt="Ícone de Design Eficiente" />
+      </div>
+      <div class="feature-text">
+        <h2>Design Eficiente</h2>
+        <p>
+          Com uma interface limpa e intuitiva, nosso site oferece fácil acesso a todas as ferramentas e informações necessárias para um atendimento rápido e eficiente. A navegação foi pensada para garantir agilidade e clareza.
+        </p>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="feature-image">
+        <img src="../imgs/mac-os.png" alt="Ícone de Suporte 24/7" />
+      </div>
+      <div class="feature-text">
+        <h2>Suporte 24/7</h2>
+        <p>
+          Estamos prontos para ajudar a qualquer momento, todos os dias da semana. Seja qual for o seu problema, nossa equipe está sempre disponível para oferecer o melhor suporte técnico, com rapidez e competência.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <p>&copy; 2025 4DeskSolutions - Todos os direitos reservados.</p>
+      <div class="social-media" aria-label="Redes sociais da empresa">
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          <img src="../imgs/facebook.png" alt="Facebook" />
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          <img src="../imgs/twitter.png" alt="Twitter" />
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          <img src="../imgs/linkedin.png" alt="LinkedIn" />
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          <img src="../imgs/instagram (1).png" alt="Instagram" />
+        </a>
+      </div>
     </div>
   </footer>
 
-  <script src="index.js"></script>
-  <script>
-    // JavaScript para redirecionar ao selecionar uma opção no dropdown
-    document.getElementById('loginSelect').addEventListener('change', function () {
-      const selectedValue = this.value;
-      if (selectedValue) {
-        window.location.href = selectedValue; // Redireciona para o arquivo selecionado
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,10 +1,9 @@
-<!-- interno_login.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Interno</title>
+  <title>Login Interno - 4DeskSolutions</title>
   <style>
     * {
       margin: 0;
@@ -14,57 +13,62 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #000;
+      background: linear-gradient(180deg, #0e0e0e 0%, #1a1a2f 100%);
       color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      padding: 20px;
     }
 
     .box {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 10px;
+      background: #111;
+      padding: 40px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 320px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      gap: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #222;
     }
 
     .box h2 {
       text-align: center;
       color: #fff;
+      font-size: 24px;
     }
 
     input {
-      padding: 12px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #000;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #0e0e0e;
       color: #fff;
+      font-size: 15px;
       outline: none;
     }
 
     input::placeholder {
-      color: #aaa;
+      color: #888;
     }
 
     button {
       padding: 12px;
-      border-radius: 6px;
-      background-color: #ff9900;
-      color: #000;
+      border-radius: 25px;
+      background-color: #0070f3;
+      color: #fff;
       font-weight: bold;
       cursor: pointer;
+      font-size: 16px;
       border: none;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #e68a00;
+      background-color: #0055aa;
     }
 
     @media (max-width: 400px) {
@@ -88,7 +92,7 @@
       const senha = document.getElementById('senha').value.trim();
 
       if (usuario && senha) {
-        window.location.href = "interno_chamados.html";
+        window.location.href = "../cadastro/interno_chamados.html";
       } else {
         alert("Preencha os campos para continuar.");
       }

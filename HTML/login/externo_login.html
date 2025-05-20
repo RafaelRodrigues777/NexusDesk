@@ -56,12 +56,12 @@
       font-size: 16px;
       border: none;
       transition: background 0.3s ease;
+      margin-bottom: 10px;
     }
 
     .btn-primary {
       background-color: #0070f3;
       color: #fff;
-      margin-bottom: 10px;
     }
 
     .btn-primary:hover {
@@ -88,13 +88,14 @@
       <input type="password" id="senha" placeholder="Senha">
       <button class="btn-primary" onclick="login()">Entrar</button>
       <button class="btn-secondary" onclick="window.location.href='externo_cadastro.html'">Cadastrar</button>
+      <button class="btn-secondary" onclick="window.location.href='interno_login.html'">Acesso Interno</button>
     </div>
   </div>
 
   <script>
     function login() {
       // Aqui você pode implementar verificação real
-      window.location.href = "externo_front.html";
+      window.location.href = "../scr-usuario/externo_front.html ";
     }
   </script>
 </body>

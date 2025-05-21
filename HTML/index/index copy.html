@@ -126,22 +126,37 @@
       box-shadow: 0 10px 20px rgba(30, 64, 175, 0.8);
       outline: none;
     }
+  .mockup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+  }
 
-    section.mockup {
-      padding: 3rem 1rem 5rem;
-      display: flex;
-      justify-content: center;
-      background: transparent;
-    }
 
-    .mockup-container {
-      display: flex;
-      gap: 3rem;
-      max-width: 900px;
-      width: 100%;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+  .mockup-container {
+    position: relative;
+    max-width: 900px;
+    width: 90%;
+  }
+
+  .desktop-img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .phone-img {
+    position: absolute;
+    bottom: -30px;
+    right: -30px; 
+    width: 200px;
+    border-radius: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    background: rgb(22, 22, 22);
+    padding: 10px;
+  }
 
     .desktop-img,
     .phone-img {
@@ -163,11 +178,11 @@
       color: #cbd5e1;
       user-select: none;
     }
-
+    
     .slider {
       overflow-x: hidden;
       padding: 0 1rem 3rem;
-      background: rgba(15, 23, 42, 0.8);
+      background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
       border-radius: 12px;
       max-width: 1200px;
       margin: 0 auto 3rem;
@@ -301,6 +316,145 @@
         gap: 2rem;
       }
     }
+    .consultoria-ti {
+  background: linear-gradient(nulldeg,rgba(15, 23, 42, 1) 0%, rgba(0, 0, 0, 1) 100%);
+  background-size: cover;
+  padding: 4rem 2rem;
+  color: #e0e7ff;
+}
+
+.consultoria-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: rgba(15, 23, 42, 0.85);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.consultoria-texto {
+  flex: 1 1 48%;
+}
+
+.consultoria-texto h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.consultoria-texto h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #f8fafc;
+}
+
+.consultoria-texto p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.consultoria-texto .verde {
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.consultoria-texto .negrito {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.consultoria-formulario {
+  flex: 1 1 48%;
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.consultoria-formulario h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #60a5fa;
+}
+
+.consultoria-formulario p {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.consultoria-formulario form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form-row input {
+  flex: 1 1 48%;
+}
+
+.consultoria-formulario input,
+.consultoria-formulario textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #e0e7ff;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.consultoria-formulario input::placeholder,
+.consultoria-formulario textarea::placeholder {
+  color: #64748b;
+}
+
+.consultoria-formulario button {
+  background: #2563eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.5);
+}
+
+.consultoria-formulario button:hover {
+  background: #1e40af;
+}
+
+@media (max-width: 768px) {
+  .consultoria-container {
+    flex-direction: column;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -310,7 +464,7 @@
       <a href="#home">Início</a>
       <a href="#features">Serviços</a>
       <a href="../planos/planos.html">Planos</a>
-      <a href="#contact">Contato</a>
+      <a href="#contato">Contato</a>
     </nav>
     <a href="../login/externo_login.html">
       <button class="header-btn" type="button">Acesse o Suporte</button>
@@ -323,14 +477,21 @@
     <button class="hero-btn" type="button">Solicitar Suporte</button>
   </section>
 
-  <section class="mockup" id="mockup">
+  <section class="mockup" id="mockup" aria-label="Visualização da aplicação em desktop e celular">
     <div class="mockup-container">
-      <img class="desktop-img" src="../imgs/assets_task_01jswtxnwvezqav4ga5n6k66km_1745798282_img_0.webp" alt="Tela de Suporte - Computador" />
-      <img class="phone-img" src="../imgs/5f399e48-339e-4355-9ff7-4df16474fb5b.jpeg" alt="Tela de Suporte - Celular" />
+      <img
+        class="desktop-img"
+        src="../imgs/assets_task_01jswtxnwvezqav4ga5n6k66km_1745798282_img_0.webp"
+        alt="Tela de Suporte - Computador"
+      />
+      <img
+        class="phone-img"
+        src="../imgs/5f399e48-339e-4355-9ff7-4df16474fb5b.jpeg"
+        alt="Tela de Suporte - Celular"
+      />
     </div>
   </section>
-
-  <section class="partners">
+    <section class="partners">
     <h1>Nossos Parceiros</h1>
     <div class="slider" aria-label="Parceiros em carrossel">
       <div class="slider-items" role="list">
@@ -352,6 +513,47 @@
       </div>
     </div>
   </section>
+  
+
+<!-- ========================== -->
+<!-- INÍCIO - Seção Consultoria de TI Terceirizado -->
+<!-- ========================== -->
+
+<section class="consultoria-ti" id="contato">
+  <div class="consultoria-container">
+    <div class="consultoria-texto">
+      <h3><span class="verde">ENTRE EM CONTATO</span><span class="negrito"> 4Desk</span></h3>
+      <h1>Simulação de TI <br /><strong>Personalizada</strong></h1>
+      <p>
+        Descubra como uma simulação personalizada de suporte de TI com a CWB-TI pode atender às necessidades da sua empresa. Obtenha uma análise prática e visualize como otimizar sua estrutura tecnológica.
+      </p>
+      <p><strong>Solicite agora sua simulação gratuita com os especialistas da CWB-TI</strong></p>
+    </div>
+
+    <div class="consultoria-formulario">
+      <h2>Solicite uma Simulação Gratuita</h2>
+      <p><em>Não perca a oportunidade de fazer uma simulação personalizada para sua empresa. Entre em contato agora mesmo!</em></p>
+      <form>
+        <div class="form-row">
+          <input type="text" placeholder="Nome" required />
+          <input type="text" placeholder="Empresa" required />
+        </div>
+        <div class="form-row">
+          <input type="tel" placeholder="Telefone" required />
+          <input type="email" placeholder="Email" required />
+        </div>
+        <textarea placeholder="Mensagem" rows="4"></textarea>
+        <button type="submit"><span>📧</span> Solicitar Simulação</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================== -->
+<!-- FIM - Seção Consultoria de TI Terceirizado -->
+<!-- ========================== -->
+
 
   <section class="features" id="features">
     <div class="feature">

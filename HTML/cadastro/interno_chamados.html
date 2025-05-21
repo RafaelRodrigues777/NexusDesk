@@ -4,20 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Painel Interno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
   <style>
-    :root {
-      --primary-color: #0d1117; /* Cor de fundo principal */
-      --accent-color: #1f6feb; /* Cor de destaque */
-      --accent-hover: #1a53c2; /* Cor de destaque ao passar o mouse */
-      --bg-color: #161b22; /* Cor de fundo do painel */
-      --text-light: #f5f5f5; /* Texto claro */
-      --text-muted: #8b949e; /* Texto secundário */
-      --box-bg: #2c313a; /* Fundo das caixas */
-      --box-border: #444d56; /* Cor da borda das caixas */
-      --border-focus: #1f6feb; /* Cor de foco do input */
-      --transition-speed: 0.2s; /* Velocidade da transição */
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -25,135 +14,132 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-light);
+      font-family: 'Inter', sans-serif;
       display: flex;
       min-height: 100vh;
+      background-color: #f1f5f9;
     }
 
     aside {
-      width: 220px;
-      background-color: var(--primary-color);
-      padding: 24px 16px;
+      width: 260px;
+      background-color: #0f172a;
+      color: #fff;
+      padding: 30px 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      border-right: 1px solid var(--box-border);
     }
 
     aside h3 {
-      font-size: 16px;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #38bdf8;
+      margin-bottom: 30px;
+      text-align: center;
     }
 
     aside button {
-      background-color: transparent;
-      border: 1px solid var(--accent-color);
-      color: var(--accent-color);
-      padding: 10px;
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      text-align: left;
+      padding: 12px;
       border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 15px;
+      margin-bottom: 10px;
       cursor: pointer;
-      transition: background-color var(--transition-speed), color var(--transition-speed);
+      display: flex;
+      align-items: center;
+      transition: 0.3s;
     }
 
     aside button:hover {
-      background-color: var(--accent-color);
-      color: var(--primary-color);
+      background-color: #1e293b;
+      color: #fff;
+    }
+
+    aside button i {
+      margin-right: 12px;
+      font-size: 16px;
     }
 
     .content {
       flex: 1;
-      padding: 30px 24px;
       display: flex;
       flex-direction: column;
+      padding: 40px;
+      overflow-y: auto;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
       flex-wrap: wrap;
       gap: 12px;
     }
 
     header h2 {
-      font-size: 24px;
-      color: var(--accent-color);
+      font-size: 22px;
+      color: #1e293b;
     }
 
     header input {
-      flex: 1;
-      max-width: 340px;
-      padding: 10px 14px;
-      border: 1px solid var(--box-border);
+      padding: 10px 16px;
+      border: 1px solid #e2e8f0;
       border-radius: 8px;
-      background-color: #111;
-      color: var(--text-light);
+      background-color: #fff;
+      color: #1e293b;
       font-size: 14px;
-      transition: border var(--transition-speed);
-    }
-
-    header input::placeholder {
-      color: var(--text-muted);
-    }
-
-    header input:focus {
-      border-color: var(--border-focus);
-      outline: none;
+      width: 100%;
+      max-width: 320px;
     }
 
     .chamados {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      gap: 24px;
     }
 
     .chamado-box {
-      background-color: var(--box-bg);
-      border: 1px solid var(--box-border);
+      background-color: #ffffff;
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .chamado-box:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(31, 111, 235, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     }
 
     .chamado-box h3 {
       font-size: 18px;
-      margin-bottom: 8px;
-      color: var(--accent-color);
+      margin-bottom: 10px;
+      color: #0ea5e9;
     }
 
     .chamado-box p {
       font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
+      color: #64748b;
+      margin-bottom: 4px;
     }
 
     .btn-ver {
       display: inline-block;
       margin-top: 12px;
       padding: 8px 14px;
-      background-color: var(--accent-color);
-      color: #111;
+      background-color: #0ea5e9;
+      color: #fff;
       text-decoration: none;
       border-radius: 8px;
-      font-weight: 500;
+      font-weight: 600;
       transition: background-color 0.2s;
     }
 
     .btn-ver:hover {
-      background-color: var(--accent-hover);
+      background-color: #0284c7;
     }
 
     @media (max-width: 768px) {
@@ -186,11 +172,11 @@
 </head>
 <body>
   <aside>
-    <h3>Menu</h3>
-    <button>Dashboard</button>
-    <button>Meus Chamados</button>
-    <button>Configurações</button>
-    <button>Sair</button>
+    <h3>4DeskSolutions</h3>
+    <button><i class="fas fa-chart-line"></i> Dashboard</button>
+    <button><i class="fas fa-clipboard-list"></i> Meus Chamados</button>
+    <button><i class="fas fa-cog"></i> Configurações</button>
+    <button><i class="fas fa-sign-out-alt"></i> Sair</button>
   </aside>
   <div class="content">
     <header>
@@ -198,7 +184,6 @@
       <input type="text" placeholder="Buscar chamados...">
     </header>
     <div class="chamados">
-      <!-- Chamados simulados (exemplo) -->
       <div class="chamado-box">
         <h3>Chamado #101 - João Silva</h3>
         <p><strong>Local:</strong> Setor de TI</p>

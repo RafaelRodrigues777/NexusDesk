@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Últimas Notícias - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: #0f172a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      transition: width 0.3s ease;
+    }
+
+    .sidebar .logo {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #1e293b;
+      color: #fff;
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .topbar {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .topbar h1 {
+      font-size: 22px;
+      color: #1e293b;
+    }
+
+    .content {
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .news-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .news-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .news-content {
+      padding: 20px;
+    }
+
+    .news-content h3 {
+      font-size: 18px;
+      color: #0ea5e9;
+      margin-bottom: 10px;
+    }
+
+    .news-content p {
+      font-size: 14px;
+      color: #475569;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        width: 100%;
+      }
+
+      .topbar {
+        text-align: center;
+      }
+    }
+      .news-card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">4DeskSolutions</div>
+    <a href="../scr-usuario/externo_front.html"><i class="fas fa-house"></i> Home</a>
+    <a href="../anuncios/noticias.html" class="active"><i class="fas fa-bullhorn"></i> Anúncios</a>
+    <a href="../faqs/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="../pds/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Últimas Notícias</h1>
+    </div>
+    <div class="content">
+    <div class="news-grid">
+      <a href="noticia1.html" class="news-card">
+        <img src="boitumelo-fP9VEkZ-L0s-unsplash.jpg" alt="Atendimento 24h" />
+        <div class="news-content">
+          <h3>Atendimento 24h disponível</h3>
+          <p>Agora você pode contar com suporte técnico remoto 24 horas por dia, 7 dias por semana.</p>
+        </div>
+      </a>
+
+      <a href="noticia2.html" class="news-card">
+        <img src="mohammad-rahmani-oXlXu2qukGE-unsplash.jpg" alt="Nova ferramenta de monitoramento" />
+        <div class="news-content">
+          <h3>Lançamento de ferramenta de monitoramento</h3>
+          <p>Monitoramento proativo para servidores e estações de trabalho disponível para clientes corporativos.</p>
+        </div>
+      </a>
+
+      <a href="noticia3.html" class="news-card">
+        <img src="tyler-lastovich-rAtzDB6hWrU-unsplash.jpg" alt="Pesquisa de satisfação" />
+        <div class="news-content">
+          <h3>Campanha de feedback</h3>
+          <p>Participe da nossa pesquisa de satisfação e concorra a 1 mês de suporte gratuito!</p>
+        </div>
+      </a>
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

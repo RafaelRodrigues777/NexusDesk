@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planos de Serviço - 4DeskSolutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+      color: #d1d5db;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    .content-wrapper {
+      flex: 1 0 auto;
+      max-width: 1200px;
+      margin: 4rem auto 0 auto;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    header.header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid #334155;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    nav.nav a {
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0 1rem;
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    nav.nav a:hover {
+      color: #3b82f6;
+    }
+
+    .header-btn {
+      background: #3b82f6;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1.25rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 6px 10px rgba(59, 130, 246, 0.6);
+    }
+
+    .header-btn:hover {
+      background: #2563eb;
+    }
+
+    .planos-section h1 {
+      font-size: 2.5rem;
+      color: #f8fafc;
+      margin-bottom: 2rem;
+    }
+
+    .planos-section p.intro {
+      max-width: 700px;
+      margin: 0 auto 3rem auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #a1aab8;
+    }
+
+    .planos-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .plano {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      width: 300px;
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+
+    .plano:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+    }
+
+    .plano h2 {
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+
+    .plano p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+
+    .plano strong {
+      display: block;
+      font-size: 1.25rem;
+      color: #3b82f6;
+      margin-bottom: 1rem;
+    }
+
+    .plano button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .plano button:hover {
+      background: #1e40af;
+    }
+
+    footer.footer {
+      background: #1e40af;
+      color: #e0e7ff;
+      text-align: center;
+      padding: 1.5rem;
+      flex-shrink: 0;
+      box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .social-media {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .social-media a img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0) invert(1);
+      transition: filter 0.3s ease;
+    }
+
+    .social-media a:hover img {
+      filter: brightness(0) invert(0.5) sepia(1) saturate(5) hue-rotate(190deg);
+    }
+
+    @media (max-width: 768px) {
+      .planos-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">4DeskSolutions</div>
+    <nav class="nav">
+      <a href="../index/index copy.html">Início</a>
+      <a href="../index/index copy.html#features">Serviços</a>
+      <a href="#pricing">Planos</a>
+      <a href="../index/index copy.html#contato">Contato</a>
+    </nav>
+    <a href="../login/externo_login.html">
+      <button class="header-btn">Acesse o Suporte</button>
+    </a>
+  </header>
+
+<div class="content-wrapper">
+  <section class="planos-section" id="pricing">
+    <h1>Nossos Planos de Serviço</h1>
+    <p class="intro">
+      Na 4DeskSolutions, oferecemos planos de suporte técnico para atender desde pequenas empresas até grandes corporações. Escolha o plano que melhor se adapta às necessidades da sua empresa e conte com uma equipe dedicada para manter seus sistemas sempre funcionando.
+    </p>
+    <div class="planos-container">
+      <div class="plano">
+        <h2>Plano Básico</h2>
+        <p>Ideal para pequenas empresas que precisam de suporte ocasional.</p>
+        <strong>R$ 199/mês</strong>
+        <p>
+          ✔ Suporte via e-mail<br />
+          ✔ 5 chamados por mês<br />
+          ✔ Tempo de resposta: até 24h
+        </p>
+        <p>
+          Nosso plano básico oferece uma solução econômica para quem precisa resolver problemas pontuais sem comprometer a produtividade.
+        </p>
+        <a href="formulario.html?plano=basico">
+          <button>Assinar</button>
+        </a>
+      </div>
+
+      <div class="plano">
+        <h2>Plano Profissional</h2>
+        <p>Para empresas que precisam de suporte contínuo e eficiente.</p>
+        <strong>R$ 499/mês</strong>
+        <p>
+          ✔ Suporte e-mail + telefone<br />
+          ✔ 20 chamados por mês<br />
+          ✔ Tempo de resposta: até 4h
+        </p>
+        <p>
+          Indicado para empresas que buscam um atendimento ágil e personalizado, garantindo a estabilidade e segurança dos sistemas.
+        </p>
+        <a href="formulario.html?plano=profissional">
+          <button>Assinar</button>
+        </a>
+      </div>
+
+      <div class="plano">
+        <h2>Plano Corporativo</h2>
+        <p>Suporte total para grandes empresas com alto volume de chamados.</p>
+        <strong>R$ 999/mês</strong>
+        <p>
+          ✔ Suporte total (e-mail, telefone, remoto)<br />
+          ✔ Chamados ilimitados<br />
+          ✔ Resposta imediata 24/7
+        </p>
+        <p>
+          A solução definitiva para empresas que exigem alta disponibilidade e suporte contínuo, com atendimento prioritário e consultoria especializada.
+        </p>
+        <a href="formulario.html?plano=corporativo">
+          <button>Assinar</button>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <footer class="footer">
+    <p>&copy; 2025 4DeskSolutions. Todos os direitos reservados.</p>
+    <div class="social-media" role="list" aria-label="Redes sociais">
+      <a href="#" role="listitem" tabindex="0"><img src="../imgs/facebook.png" alt="Facebook" /></a>
+      <a href="#" role="listitem" tabindex="0"><img src="../imgs/instagram (1).png" alt="Instagram" /></a>
+      <a href="#" role="listitem" tabindex="0"><img src="../imgs/twitter.png" alt="Twitter" /></a>
+      <a href="#" role="listitem" tabindex="0"><img src="../imgs/linkedin.png" alt="LinkedIn" /></a>
+    </div>
+  </footer>
+</body>
+</html>

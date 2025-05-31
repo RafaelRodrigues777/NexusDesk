@@ -6,6 +6,26 @@
   <title>Abrir Chamado - 4DeskSolutions</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Firebase App e Database via CDN -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+      authDomain: "desksolutions-204dd.firebaseapp.com",
+      databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+      projectId: "desksolutions-204dd",
+      storageBucket: "desksolutions-204dd.appspot.com",
+      messagingSenderId: "169920163822",
+      appId: "1:169920163822:web:47f6b28c136922ac85e8ff",
+      measurementId: "G-MER6JEHRSH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.db = getDatabase(app);
+  </script>
+
   <style>
     :root {
       --background: #f9f9f9;
@@ -285,16 +305,49 @@
     </div>
   </div>
 
-  <script>
-    function enviarFormulario() {
-      const modal = document.getElementById("confirmacao-modal");
-      modal.style.display = "flex";
+  <script type="module">
+    import { ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-      setTimeout(() => {
-        modal.style.display = "none";
-      }, 5000);
+    async function enviarFormulario() {
+      const telefone = document.getElementById("telefone").value;
+      const local = document.getElementById("local").value;
+      const usuario = document.getElementById("usuario").value;
+      const descricao = document.getElementById("descricao").value;
+      const categoria = document.querySelector("select[name='categoria']").value;
+
+      try {
+        const chamadosRef = ref(window.db, "chamados");
+        const novoChamadoRef = push(chamadosRef);
+
+        await set(novoChamadoRef, {
+          telefone,
+          local,
+          usuario,
+          descricao,
+          categoria,
+          criadoEm: { ".sv": "timestamp" }
+        });
+
+        // Mostra o modal de confirmação
+        const modal = document.getElementById("confirmacao-modal");
+        modal.style.display = "flex";
+
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.querySelector("form").reset();
+        }, 5000);
+
+      } catch (error) {
+        console.error("Erro ao enviar chamado:", error);
+        alert("Erro ao enviar chamado. Tente novamente.");
+      }
     }
+
+    // Expõe a função para uso no botão HTML
+    window.enviarFormulario = enviarFormulario;
   </script>
+
+
 
 </body>
 </html>

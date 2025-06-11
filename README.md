@@ -1,4 +1,5 @@
 4Desk Solutions – Sistema de Gerenciamento de Chamados
+
 📌 Sobre o Projeto
 O 4Desk Solutions é um sistema web para gerenciamento de chamados de suporte técnico, desenvolvido como projeto acadêmico no curso de Engenharia de Software. O principal objetivo é oferecer uma solução simples, funcional e acessível para empresas organizarem e acompanharem solicitações de suporte técnico, promovendo uma comunicação mais eficiente entre clientes e técnicos.
 

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abrir Chamado - 4DeskSolutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../css/style_aberto.css" /> 
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="logo">4DeskSolutions</div>
+            <nav>
+                <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+                <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+                <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+                <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+                <a href="../html/tes.html" class="active"><i class="fas fa-ticket-alt"></i> Acompanhar Chamados</a> 
+            </nav>
+        </div>
+    </aside>
+
+    <main class="main">
+        <form method="POST" action="" id="formAbrirChamado">
+            <div class="form-header">
+                <div class="tipo-chamado" style="flex: 1; text-align: center;">Abertura de Novo Chamado</div>
+            </div>
+
+            <div class="form-group">
+                <label for="nomeCompleto">Seu Nome Completo</label>
+                <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+            </div>
+
+            <div class="form-group">    
+                <label for="usuarioEmailFixo">Seu E-mail</label>
+                <input type="email" id="usuarioEmailFixo" name="usuarioEmailFixo" readonly required>
+            </div>
+
+            <div class="form-group">
+                <label for="empresa">Sua Empresa</label>
+                <input type="text" id="empresa" name="empresa" readonly required>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone para Contato</label>
+                <input type="text" id="telefone" name="telefone" required placeholder="(XX) XXXXX-XXXX">
+            </div>
+
+            <div class="form-group">
+                <label for="setor">Seu Setor/Departamento</label>
+                <input type="text" id="setor" name="setor" required placeholder="Ex: RH, Financeiro, TI">
+            </div>
+
+            <div class="form-group">
+                <label for="local">Local do Equipamento/Serviço</label>
+                <input type="text" id="local" name="local" required placeholder="Ex: Sala 101, Prédio B, Andar 3">
+            </div>
+
+            <div class="form-group">
+                <label for="tipoEquipamento">Tipo de Equipamento/Serviço</label>
+                <select id="tipoEquipamento" name="tipoEquipamento" required>
+                    <option value="">Selecione o Tipo</option>
+                    <option value="Computador">Computador</option>
+                    <option value="Notebook">Notebook</option>
+                    <option value="Impressora">Impressora</option>
+                    <option value="Monitor">Monitor</option> 
+                    <option value="Perifericos">Periféricos</option> 
+                    <option value="Rede/Internet">Rede/Internet</option>
+                    <option value="Sistema/Software">Sistema/Software</option>
+                    <option value="Telefonia">Telefonia</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="descricao">Descrição Detalhada do Problema</label>
+                <textarea id="descricao" name="descricao" required placeholder="Descreva o problema com o máximo de detalhes possível, incluindo mensagens de erro, o que foi tentado, etc."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="prioridade">Prioridade do Chamado</label>
+                <select id="prioridade" name="prioridade" required>
+                    <option value="">Selecione a Prioridade</option>
+                    <option value="Baixa">Baixa (Pode esperar)</option>
+                    <option value="Média">Média (Atenção em breve)</option>
+                    <option value="Alta">Alta (Urgente, impacto na operação)</option>
+                    <option value="Crítica">Crítica (Interrompe operação crítica)</option>
+                </select>
+            </div>
+
+            <div class="form-footer">
+                <select id="categoria" name="categoria" required style="display:none;">
+                    <option value="Suporte Técnico">Suporte Técnico</option>
+                </select>
+                
+                <button type="submit" class="button" id="btnAbrirChamado">Abrir Chamado</button>
+            </div>
+        </form>
+
+        <p id="mensagem-enviada">Chamado enviado com sucesso!</p>
+    </main>
+
+    <div id="confirmacao-modal">
+        <div class="modal-content">
+            <p>Chamado aberto com sucesso!</p>
+            <button onclick="window.location.href='../html/externo_front.html'">Voltar para Home</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importações do Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        // Adicionado: Firestore para ler dados do perfil do usuário
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"; 
+        import { getDatabase, ref, push, get, query, orderByChild, equalTo, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+            authDomain: "desksolutions-204dd.firebaseapp.com",
+            databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+            projectId: "desksolutions-204dd",
+            storageBucket: "desksolutions-204dd.appspot.com",
+            messagingSenderId: "169920163822",
+            appId: "1:169920163822:web:47f6b28c136922ac85e8ff",
+            measurementId: "G-MER6JEHRSH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const firestore = getFirestore(app); // Inicializa o Firestore
+
+        // Referências do DOM
+        const formAbrirChamado = document.getElementById("formAbrirChamado");
+        const btnAbrirChamado = document.getElementById("btnAbrirChamado");
+        
+        // Campos do Solicitante
+        const inputNomeCompleto = document.getElementById("nomeCompleto");
+        const inputUsuarioEmailFixo = document.getElementById("usuarioEmailFixo");
+        const inputEmpresa = document.getElementById("empresa"); // Novo input da empresa
+        const inputTelefone = document.getElementById("telefone");
+        const inputSetor = document.getElementById("setor");
+        const inputLocal = document.getElementById("local");
+
+        // Campos do Chamado
+        const inputTipoEquipamento = document.getElementById("tipoEquipamento");
+        const inputDescricao = document.getElementById("descricao");
+        const inputPrioridade = document.getElementById("prioridade");
+        const inputCategoria = document.getElementById("categoria");
+
+        const confirmacaoModal = document.getElementById("confirmacao-modal");
+
+        const chamadosRef = ref(db, "chamados");
+
+        // --- Adição da Validação para o Nome Completo ---
+        inputNomeCompleto.addEventListener('input', function() {
+            let value = this.value;
+            // Permite apenas letras, espaços e acentos
+            value = value.replace(/[^a-zA-Z\sÀ-ú]/g, ''); 
+            // Garante que a primeira letra de cada palavra seja maiúscula
+            value = value.replace(/\b(\w)/g, s => s.toUpperCase());
+            this.value = value;
+        });
+
+        // --- Adição da Máscara para o Telefone ---
+        inputTelefone.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            let formattedValue = '';
+
+            if (value.length > 0) {
+                formattedValue += '(' + value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                formattedValue += ') ' + value.substring(2, 7);
+            }
+            if (value.length > 7) {
+                formattedValue += '-' + value.substring(7, 11);
+            }
+            this.value = formattedValue;
+        });
+
+
+        // Autenticação: Preenche os campos de e-mail e NOME DA EMPRESA fixa, e redireciona se não estiver logado
+        onAuthStateChanged(auth, async (user) => { // Tornar async para usar await
+            if (user) {
+                console.log("DEBUG: Usuário logado na página de abertura de chamado:", user.email);
+                inputUsuarioEmailFixo.value = user.email; // Preenche o campo com o e-mail do usuário
+                inputUsuarioEmailFixo.readOnly = true; // Garante que é somente leitura
+
+                try {
+                    // Busca os dados do perfil do usuário no Firestore
+                    const userDocRef = doc(firestore, "usuarios", user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        inputNomeCompleto.value = userData.nome || ""; // Preenche o nome completo do perfil
+                        inputTelefone.value = userData.telefone || ""; // Preenche o telefone do perfil
+                        inputSetor.value = userData.departamento || ""; // Preenche o departamento do perfil
+                        
+                        // **** NOVO: Preenche o campo da empresa ****
+                        inputEmpresa.value = userData.empresaAssociada || "Empresa Não Definida";
+                        inputEmpresa.readOnly = true; // Garante que o campo da empresa é somente leitura
+
+                        console.log("DEBUG: Dados do perfil do usuário carregados do Firestore:", userData);
+                    } else {
+                        console.warn("AVISO: Perfil de usuário não encontrado no Firestore para UID:", user.uid);
+                        // Opcional: Avisar o usuário para completar o perfil
+                        alert("Seu perfil não está completo. Por favor, preencha os campos de nome, telefone e departamento.");
+                        inputEmpresa.value = "Empresa Não Definida"; // Preenche com default se não achar empresa
+                    }
+                } catch (error) {
+                    console.error("ERRO: Ao buscar perfil do usuário no Firestore:", error);
+                    alert("Erro ao carregar dados do seu perfil. Tente novamente.");
+                    inputEmpresa.value = "Erro ao Carregar Empresa";
+                }
+
+            } else {
+                console.warn("DEBUG: Usuário NÃO logado. Redirecionando para a página de login.");
+                alert("Você precisa estar logado para abrir um chamado.");
+                window.location.href = "../externo_login.html"; // Redireciona para sua página de login
+            }
+        });
+
+        // Função para gerar um número aleatório de 6 dígitos (000000 a 999999)
+        function gerarNumeroAleatorio6Digitos() {
+            return String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
+        }
+
+        // Função para verificar se um número de chamado já existe no DB
+        async function verificarNumeroExistente(numero) {
+            console.log(`DEBUG: Verificando unicidade para o número: ${numero}`);
+            const q = query(ref(db, "chamados"), orderByChild("numeroChamado"), equalTo(numero));
+            const snapshot = await get(q);
+            const exists = snapshot.exists();
+            console.log(`DEBUG: Número ${numero} existe? ${exists}`);
+            return exists;
+        }
+
+        // Event Listener para o envio do formulário
+        formAbrirChamado.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            btnAbrirChamado.disabled = true;
+            btnAbrirChamado.textContent = "Abrindo Chamado...";
+
+            // Captura dos campos do solicitante
+            const nomeCompleto = inputNomeCompleto.value.trim();
+            const emailUsuario = inputUsuarioEmailFixo.value.trim();
+            const empresa = inputEmpresa.value.trim(); // **** NOVO: Captura o valor da empresa ****
+            const telefone = inputTelefone.value.trim();
+            const setor = inputSetor.value.trim();
+            const local = inputLocal.value.trim();
+            
+            // Captura dos campos do chamado
+            const tipoEquipamento = inputTipoEquipamento.value.trim();
+            const descricao = inputDescricao.value.trim();
+            const prioridade = inputPrioridade.value.trim();
+            const categoria = inputCategoria.value.trim();
+
+            // --- Validação Aprimorada antes do envio ---
+            // Adicionado 'empresa' na validação de campos obrigatórios
+            if (!nomeCompleto || !emailUsuario || !empresa || !telefone || !setor || !local || !tipoEquipamento || !descricao || !prioridade || !categoria) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                btnAbrirChamado.disabled = false;
+                btnAbrirChamado.textContent = "Abrir Chamado";
+                return;
+            }
+
+            // Validação de nome completo (pelo menos duas palavras de letras)
+            const nomeRegex = /^[a-zA-ZÀ-ú]+(?:\s[a-zA-ZÀ-ú]+)+$/;
+            if (!nomeRegex.test(nomeCompleto)) {
+                alert("Por favor, insira seu nome completo (nome e sobrenome), apenas com letras.");
+                btnAbrirChamado.disabled = false;
+                btnAbrirChamado.textContent = "Abrir Chamado";
+                return;
+            }
+
+            // Validação de telefone (formato (XX) XXXXX-XXXX)
+            const telefoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
+            if (!telefoneRegex.test(telefone)) {
+                alert("Por favor, insira um telefone válido no formato (XX) XXXXX-XXXX.");
+                btnAbrirChamado.disabled = false;
+                btnAbrirChamado.textContent = "Abrir Chamado";
+                return;
+            }
+            // --- Fim das Validações Aprimoradas ---
+
+
+            try {
+                let numeroChamadoUnico = '';
+                let tentativas = 0;
+                const maxTentativas = 50;
+
+                while (true) {
+                    if (tentativas >= maxTentativas) {
+                        throw new Error("Não foi possível gerar um número de chamado único após " + maxTentativas + " tentativas. O banco de dados pode estar cheio ou o algoritmo de geração precisa ser revisado.");
+                    }
+                    
+                    const numeroGerado = gerarNumeroAleatorio6Digitos();
+                    const existe = await verificarNumeroExistente(numeroGerado);
+                    if (!existe) {
+                        numeroChamadoUnico = numeroGerado;
+                        break;
+                    }
+                    tentativas++;
+                }
+
+                // Dados do novo chamado
+                const novoChamadoData = {
+                    nomeCompleto: nomeCompleto,
+                    usuarioEmail: emailUsuario,
+                    empresa: empresa, // **** NOVO: Salva o nome da empresa no chamado ****
+                    telefone: telefone,
+                    setor: setor,
+                    local: local,
+                    tipoEquipamento: tipoEquipamento,
+                    descricao: descricao,
+                    prioridade: prioridade,
+                    categoria: categoria,
+                    status: "Aberto",
+                    criadoEm: serverTimestamp(),
+                    numeroChamado: numeroChamadoUnico,
+                    interacoes: {
+                        initial_note: {
+                            tecnico: "Sistema",
+                            dataHora: serverTimestamp(),
+                            tipo: "nota",
+                            nota: `Chamado #${numeroChamadoUnico} aberto por ${nomeCompleto} da empresa ${empresa}, setor ${setor} (E-mail: ${emailUsuario}). Tipo de equipamento: ${tipoEquipamento}, Prioridade: ${prioridade}.` // Nota inicial com a empresa
+                        }
+                    }
+                };
+
+                await push(chamadosRef, novoChamadoData);
+
+                confirmacaoModal.style.display = "flex";
+
+                setTimeout(() => {
+                    confirmacaoModal.style.display = "none";
+                    formAbrirChamado.reset();
+                    // Após resetar, preenche novamente os campos fixos
+                    if (auth.currentUser) {
+                        inputUsuarioEmailFixo.value = auth.currentUser.email;
+                        // Para preencher nome, telefone, setor, empresa, precisaria recarregar os dados do Firestore
+                        // ou armazená-los em variáveis e preencher aqui, para evitar uma nova chamada.
+                        // Para simplicidade, vou deixar os campos de usuário para serem preenchidos na próxima vez que a função onAuthStateChanged for acionada (se o usuário não sair)
+                        // ou você pode chamar a lógica de preenchimento novamente.
+                    }
+                    btnAbrirChamado.textContent = "Abrir Chamado";
+                    btnAbrirChamado.disabled = false;
+                }, 5000);
+
+            } catch (error) {
+                console.error("ERRO ao abrir novo chamado:", error);
+                alert("Erro ao abrir o chamado: " + error.message);
+                btnAbrirChamado.disabled = false;
+                btnAbrirChamado.textContent = "Abrir Chamado";
+            }
+        });
+
+        // --- CÓDIGO ATUALIZADO AQUI: Pré-preenchimento do Tipo de Equipamento/Serviço ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tipoChamadoParam = urlParams.get('tipo'); // 'rede', 'hardware', 'software', etc.
+
+            // Mapeamento dos tipos curtos dos cards para os valores do select em aberto.html
+            const tipoMap = {
+                'rede': 'Rede/Internet',
+                'hardware': 'Computador', 
+                'software': 'Sistema/Software',
+                'impressora': 'Impressora',
+                'monitor': 'Monitor',
+                'teclado': 'Perifericos',
+                'notebook': 'Notebook',
+                'outros': 'Outros'
+            };
+
+            if (tipoChamadoParam) {
+                const valorParaSelect = tipoMap[tipoChamadoParam];
+
+                if (valorParaSelect) {
+                    const selectElement = document.getElementById('tipoEquipamento'); 
+                    if (selectElement) {
+                        selectElement.value = valorParaSelect;
+                        selectElement.disabled = true; 
+                    }
+                } else {
+                    console.warn(`DEBUG: Tipo de chamado '${tipoChamadoParam}' não encontrado no mapeamento. O select não será pré-preenchido.`);
+                }
+            }
+        });
+        // --- FIM DO CÓDIGO ATUALIZADO ---
+
+    </script>
+</body>
+</html>

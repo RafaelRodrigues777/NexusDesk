@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avaliação - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="style_avaliar.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">4DeskSolutions</div>
+    <a href="../scr-usuario/externo_front.html"><i class="fas fa-house"></i> Home</a>
+    <a href="../anuncios/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+    <a href="../faqs/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="../pds/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+    <a href="../acompanhar-chamado/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+  </aside>
+
+  <main class="main">
+    <h1>Avaliação do Atendimento</h1>
+    <div id="evaluation-content">
+      <form id="evaluation-form">
+        <label for="nota">Nota do atendimento:</label>
+        <select id="nota" required>
+          <option value="">Selecione</option>
+          <option value="5">5 - Excelente</option>
+          <option value="4">4 - Bom</option>
+          <option value="3">3 - Regular</option>
+          <option value="2">2 - Ruim</option>
+          <option value="1">1 - Péssimo</option>
+        </select>
+
+        <label for="comentario">Comentário:</label>
+        <textarea id="comentario" placeholder="Escreva aqui sua opinião..." required></textarea>
+
+        <button type="submit">Enviar Avaliação</button>
+      </form>
+      <div id="success-message" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <p>Avaliação enviada com sucesso! Redirecionando...</p>
+      </div>
+      <div id="error-message" style="display: none;">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>Ocorreu um erro ao enviar sua avaliação. Por favor, tente novamente.</p>
+        <button id="retry-evaluation" onclick="resetForm();">Tentar Novamente</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8", // Replace with your actual API key
+      authDomain: "desksolutions-204dd.firebaseapp.com",
+      databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+      projectId: "desksolutions-204dd",
+      storageBucket: "desksolutions-204dd.appspot.com",
+      messagingSenderId: "169920163822",
+      appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const firestore = getFirestore(app);
+
+    const evaluationForm = document.getElementById('evaluation-form');
+    const successMessage = document.getElementById('success-message');
+    const errorMessage = document.getElementById('error-message');
+    // const evaluationContent = document.getElementById('evaluation-content'); // Not strictly needed here
+
+    let currentChamadoId = null;
+    let currentUserEmail = null;
+
+    // Get the chamado ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    currentChamadoId = urlParams.get('id');
+
+    if (!currentChamadoId) {
+      alert('Nenhum chamado especificado para avaliação. Redirecionando...');
+      window.location.href = '../pds/pds1.html'; // Redirect if no ID
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(firestore, "usuarios", user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            currentUserEmail = userData.email;
+            console.log("Usuário logado para avaliação:", currentUserEmail);
+          } else {
+            console.warn("Perfil de usuário não encontrado para UID:", user.uid);
+            alert("Seu perfil de usuário não foi encontrado. Por favor, faça login novamente.");
+            window.location.href = "login.html";
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dados do usuário:", error);
+          alert("Ocorreu um erro ao carregar seu perfil. Por favor, tente novamente.");
+          window.location.href = "login.html";
+        }
+      } else {
+        alert("Nenhum usuário logado. Redirecionando para a página de login.");
+        window.location.href = "login.html";
+      }
+    });
+
+    evaluationForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent default form submission
+
+      const nota = document.getElementById('nota').value;
+      const comentario = document.getElementById('comentario').value;
+
+      if (!nota || !comentario) {
+        alert('Por favor, preencha todos os campos da avaliação.');
+        return;
+      }
+
+      // Check if user and chamado ID are available
+      if (!currentChamadoId || !currentUserEmail) {
+        alert('Erro: ID do chamado ou e-mail do usuário não disponível. Tente novamente.');
+        return;
+      }
+
+      try {
+        const chamadoRef = ref(db, `chamados/${currentChamadoId}`);
+        await update(chamadoRef, {
+          notaAvaliacao: parseInt(nota), // Store as number
+          comentarioAvaliacao: comentario,
+          avaliadoEm: new Date().toISOString(), // Timestamp of evaluation
+          avaliadoPor: currentUserEmail, // Store who evaluated it
+          avaliado: true // Mark as evaluated
+        });
+
+        // --- SUCCESS ACTIONS ---
+        evaluationForm.style.display = 'none'; // Hide the form
+        successMessage.style.display = 'block'; // Show success message
+        console.log('Avaliação enviada com sucesso! Redirecionando...');
+
+        // Redirect after a short delay to allow the user to see the success message
+        setTimeout(() => {
+          window.location.href = '../pds/pds1.html';
+        }, 2000); // Redirect after 2 seconds (2000 milliseconds)
+
+      } catch (error) {
+        // --- ERROR ACTIONS ---
+        console.error('Erro ao enviar avaliação:', error);
+        evaluationForm.style.display = 'none'; // Hide the form
+        errorMessage.style.display = 'block'; // Show error message
+      }
+    });
+
+    function resetForm() {
+      evaluationForm.reset(); // Reset form fields
+      evaluationForm.style.display = 'block'; // Show the form again
+      successMessage.style.display = 'none'; // Hide success message
+      errorMessage.style.display = 'none'; // Hide error message
+    }
+  </script>
+</body>
+</html>

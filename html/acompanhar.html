@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus Chamados - 4DeskSolutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Seus estilos CSS atuais foram movidos para cá para garantir que este seja o arquivo completo */
+        :root {
+            --background: #f9f9f9;
+            --surface: #ffffff;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text: #1f2937;
+            --subtext: #6b7280;
+            --border: #e5e7eb;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #0f172a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #1e293b;
+            color: #fff;
+        }
+
+        .sidebar a i {
+            margin-right: 12px;
+        }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main h1 {
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .chamados-container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chamados-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .chamados-container th,
+        .chamados-container td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chamados-container th {
+            background-color: var(--background);
+            color: var(--subtext);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .chamados-container tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Adiciona estilo de cursor para indicar que a linha é clicável */
+        .chamados-container tbody tr {
+            cursor: pointer; 
+        }
+
+        .chamados-container tbody tr:hover {
+            background-color: #f6f7f9;
+        }
+
+        /* Estilos para os badges de status */
+        .status-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-block; /* Para que o padding funcione corretamente */
+        }
+
+        .status-aberto {
+            background-color: #fef3c7; /* yellow-100 */
+            color: #d97706; /* yellow-700 */
+        }
+
+        .status-emandamento {
+            background-color: #dbeafe; /* blue-100 */
+            color: #1e40af; /* blue-700 */
+        }
+
+        .status-resolvido, .status-fechado, .status-concluido { /* Adicionado concluído aqui */
+            background-color: #d1fae5; /* green-100 */
+            color: #065f46; /* green-700 */
+        }
+
+        .status-cancelado {
+            background-color: #fee2e2; /* red-100 */
+            color: #991b1b; /* red-700 */
+        }
+
+        .status-pendente { /* Adicionado pendente */
+            background-color: #ffe4e6; /* rosa claro */
+            color: #be185d; /* rosa escuro */
+        }
+
+        .no-chamados, .loading-chamados {
+            text-align: center;
+            color: var(--subtext);
+            padding: 3rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="logo">4DeskSolutions</div>
+            <nav>
+                <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+                <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+                <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+                <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+                <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="main">
+        <h1>Andamento dos Meus Chamados</h1>
+        <div class="chamados-container">
+            <div id="listaChamados">
+                <p class="loading-chamados">Carregando seus chamados...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getDatabase, ref, query, orderByChild, equalTo, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+            authDomain: "desksolutions-204dd.firebaseapp.com",
+            databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+            projectId: "desksolutions-204dd",
+            storageBucket: "desksolutions-204dd.appspot.com",
+            messagingSenderId: "169920163822",
+            appId: "1:169920163822:web:47f6b28c136922ac85e8ff",
+            measurementId: "G-MER6JEHRSH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        const listaChamadosDiv = document.getElementById("listaChamados");
+        const chamadosRef = ref(db, "chamados");
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const emailUsuario = user.email;
+                console.log("DEBUG: Usuário logado na página de meus chamados:", emailUsuario);
+                carregarChamadosDoUsuario(emailUsuario);
+            } else {
+                console.warn("DEBUG: Usuário NÃO logado. Redirecionando para login.");
+                alert("Você precisa estar logado para visualizar seus chamados.");
+                window.location.href = "../login.html"; // Redireciona para a página de login
+            }
+        });
+
+        async function carregarChamadosDoUsuario(emailUsuario) {
+            listaChamadosDiv.innerHTML = '<p class="loading-chamados">Carregando seus chamados...</p>';
+
+            // Consulta otimizada: busca apenas os chamados do usuário logado
+            const queryChamados = query(chamadosRef, orderByChild("usuario"), equalTo(emailUsuario));
+
+            // onValue para escutar em tempo real as mudanças
+            onValue(queryChamados, (snapshot) => {
+                if (snapshot.exists()) {
+                    const dados = snapshot.val();
+                    let chamadosDoUsuario = [];
+
+                    // Converte o objeto de chamados em um array, adicionando a chave Firebase e filtrando por status
+                    for (const key in dados) {
+                        const chamado = dados[key];
+                        // Adiciona a chave do Firebase ao objeto do chamado para fácil acesso na função de clique
+                        chamado.firebaseKey = key; 
+                        // Filtra para exibir apenas os status que o usuário normalmente acompanha
+                        if (chamado.status === "Aberto" || chamado.status === "Em Andamento" || 
+                            chamado.status === "Pendente" || chamado.status === "Resolvido" || 
+                            chamado.status === "Concluído") {
+                            chamadosDoUsuario.push(chamado);
+                        }
+                    }
+
+                    if (chamadosDoUsuario.length > 0) {
+                        // Opcional: ordenar os chamados pelos mais recentes primeiro
+                        chamadosDoUsuario.sort((a, b) => {
+                            return (b.criadoEm || 0) - (a.criadoEm || 0);
+                        });
+
+                        let chamadosHTML = `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Categoria</th>
+                                        <th>Descrição</th>
+                                        <th>Status</th>
+                                        <th>Criado Em</th>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+
+                        chamadosDoUsuario.forEach(c => {
+                            // Converte o status para minúsculas e remove espaços para a classe CSS
+                            const statusClass = c.status ? c.status.toLowerCase().replace(/\s/g, '') : 'desconhecido';
+                            const dataCriacao = c.criadoEm ? new Date(c.criadoEm).toLocaleDateString('pt-BR') : 'N/A';
+                            
+                            chamadosHTML += `
+                                <tr onclick="visualizarDetalhesChamado('${c.firebaseKey}')">
+                                    <td>#${c.numeroChamado || 'N/A'}</td>
+                                    <td>${c.categoria || 'N/A'}</td>
+                                    <td>${c.descricao ? c.descricao.substring(0, 70) + (c.descricao.length > 70 ? '...' : '') : 'N/A'}</td>
+                                    <td><span class="status-badge status-${statusClass}">${c.status || 'N/A'}</span></td>
+                                    <td>${dataCriacao}</td>
+                                    <td>${c.anexo && c.anexo.url ? `<a href="${c.anexo.url}" target="_blank" onclick="event.stopPropagation();"><i class="fas fa-paperclip"></i></a>` : 'N/A'}</td>
+                                </tr>
+                            `;
+                        });
+
+                        chamadosHTML += `
+                                </tbody>
+                            </table>
+                        `;
+                        listaChamadosDiv.innerHTML = chamadosHTML;
+
+                    } else {
+                        listaChamadosDiv.innerHTML = '<p class="no-chamados">Você ainda não abriu nenhum chamado com status Aberto, Em Andamento, Pendente, Resolvido ou Concluído.</p>';
+                    }
+                } else {
+                    listaChamadosDiv.innerHTML = '<p class="no-chamados">Nenhum chamado encontrado para o seu usuário.</p>';
+                }
+            }, (error) => {
+                console.error("ERRO ao carregar chamados do usuário:", error);
+                listaChamadosDiv.innerHTML = '<p class="no-chamados">Erro ao carregar seus chamados. Tente novamente mais tarde.</p>';
+            });
+        }
+
+        // Função para redirecionar para a página de detalhes
+        function visualizarDetalhesChamado(firebaseKey) {
+            window.location.href = `detalhe_chamado_usuario.html?id=${firebaseKey}`;
+        }
+
+        // Torna a função global para que o onclick no HTML possa chamá-la
+        window.visualizarDetalhesChamado = visualizarDetalhesChamado;
+
+    </script>
+</body>
+</html>

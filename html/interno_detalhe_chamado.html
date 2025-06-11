@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes do Chamado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../css/style_intchama.css" /> <link rel="stylesheet" href="../css/style_detacha.css" /> </head>
+<body>
+  <aside>
+    <h3>4DeskSolutions</h3>
+    <button onclick="location.href='interno_chamados.html'"><i class="fas fa-arrow-left"></i> Voltar</button>
+    <button onclick="location.href='dashboard_admin.html'"><i class="fas fa-chart-line"></i> Dashboard</button>
+    <button onclick="location.href='todos_chamados.html'"><i class="fas fa-clipboard-list"></i> Todos os Chamados</button>
+    <button onclick="location.href='../html/index_copy.html'"><i class="fas fa-sign-out-alt"></i> Sair</button>
+  </aside>
+
+  <div class="content">
+    <header>
+      <h2 id="chamadoTitulo">Detalhes do Chamado #<span id="chamadoIdDisplay"></span></h2>
+    </header>
+
+    <div class="detalhes-grid">
+      <div class="detalhe-box">
+        <h3><i class="fas fa-info-circle"></i> Dados do Chamado</h3>
+        <div class="linha-dados">
+          <div class="campo"><span class="label">Data de Abertura:</span> <span id="dataAbertura"></span></div>
+          <div class="campo"><span class="label">Usuário:</span> <span id="usuarioChamado"></span></div>
+          <div class="campo"><span class="label">Telefone:</span> <span id="telefoneChamado"></span></div>
+          <div class="campo"><span class="label">Local:</span> <span id="localChamado"></span></div>
+          <div class="campo"><span class="label">Categoria:</span> <span id="categoriaChamado"></span></div>
+          <div class="campo"><span class="label">Atribuído Para:</span> <span id="atribuidoParaChamado">Não Atribuído</span></div>
+        </div>
+        <div class="detalhe-box" style="box-shadow: none; border: 1px dashed var(--border-color); margin-top: 15px;">
+            <h3>Descrição Completa</h3>
+            <p id="descricaoChamado"></p>
+        </div>
+      </div>
+
+      <div class="detalhe-box">
+        <h3><i class="fas fa-cogs"></i> Ações do Chamado</h3>
+        <div class="acoes-status-atribuicao">
+          <label for="selectStatus">Status:</label>
+          <select id="selectStatus">
+            <option value="Aberto">Aberto</option>
+            <option value="Em Andamento">Em Andamento</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Concluído">Concluído</option>
+          </select>
+
+          <label for="selectTecnico">Atribuir:</label>
+          <select id="selectTecnico">
+            <option value="">Selecionar Técnico</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="historico-anexos">
+      <h3><i class="fas fa-history"></i> Histórico de Interações e Anexos</h3>
+      <div id="historicoLista" class="historico-lista">
+        <div class="vazio" id="historicoVazio">Nenhuma interação ou anexo ainda.</div>
+      </div>
+
+      <div class="adicionar-interacao">
+        <h4><i class="fas fa-plus-circle"></i> Adicionar Nova Interação/Anexo</h4>
+        <textarea id="textoInteracao" rows="4" placeholder="Adicione uma nota sobre o atendimento, resolução, etc."></textarea>
+        <input type="file" id="inputAnexo" accept="image/*, application/pdf, .doc, .docx, .xls, .xlsx" />
+        <div class="btn-group">
+          <button id="btnAdicionarNota"><i class="fas fa-comment-dots"></i> Adicionar Nota</button>
+          <button id="btnAnexarArquivo"><i class="fas fa-paperclip"></i> Anexar Arquivo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="acoes-gerais">
+      <button id="btnFecharChamado" class="btn-fechar"><i class="fas fa-times-circle"></i> Marcar como Concluído</button>
+    </div>
+  </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, get, update, serverTimestamp, push, onValue, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getFirestore, doc, getDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+          authDomain: "desksolutions-204dd.firebaseapp.com",
+          databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+          projectId: "desksolutions-204dd",
+          storageBucket: "desksolutions-204dd.appspot.com",
+          messagingSenderId: "169920163822",
+          appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const firestore = getFirestore(app);
+        const storage = getStorage(app);
+
+        const params = new URLSearchParams(window.location.search);
+        const chamadoId = params.get("id");
+        
+        console.log("DEBUG: ID do Chamado na URL:", chamadoId);
+
+        let chamadoRef;
+        if (chamadoId) {
+            chamadoRef = ref(db, `chamados/${chamadoId}`);
+        } else {
+            alert("Erro: ID do chamado não informado na URL. Redirecionando.");
+            window.location.href = "interno_chamados.html";
+            console.error("ERRO: ID do chamado ausente na URL.");
+            return; 
+        }
+
+        let tecnicoLogadoEmail = null;
+
+        const chamadoIdDisplay = document.getElementById("chamadoIdDisplay");
+        const dataAbertura = document.getElementById("dataAbertura");
+        const usuarioChamado = document.getElementById("usuarioChamado");
+        const telefoneChamado = document.getElementById("telefoneChamado");
+        const localChamado = document.getElementById("localChamado");
+        const categoriaChamado = document.getElementById("categoriaChamado");
+        const atribuidoParaChamado = document.getElementById("atribuidoParaChamado");
+        const descricaoChamado = document.getElementById("descricaoChamado");
+        const selectStatus = document.getElementById("selectStatus");
+        const selectTecnico = document.getElementById("selectTecnico");
+        const historicoLista = document.getElementById("historicoLista");
+        const historicoVazio = document.getElementById("historicoVazio");
+        const textoInteracao = document.getElementById("textoInteracao");
+        const inputAnexo = document.getElementById("inputAnexo");
+        const btnAdicionarNota = document.getElementById("btnAdicionarNota");
+        const btnAnexarArquivo = document.getElementById("btnAnexarArquivo");
+        const btnFecharChamado = document.getElementById("btnFecharChamado");
+
+        // Esta linha foi removida daqui, pois a atualização será feita em atualizarDadosChamadoUI
+        // chamadoIdDisplay.textContent = chamadoId; 
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("DEBUG: Usuário autenticado:", user.email, "UID:", user.uid);
+                try {
+                    const userDoc = await getDoc(doc(firestore, "usuarios", user.uid)); 
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log("DEBUG: Dados do usuário do Firestore:", userData);
+
+                        if (userData.tipo === 'tecnico') {
+                            tecnicoLogadoEmail = userData.email;
+                            console.log("DEBUG: Usuário é um técnico:", tecnicoLogadoEmail);
+
+                            await carregarTecnicos();
+
+                            onValue(chamadoRef, (snapshot) => {
+                                if (snapshot.exists()) {
+                                    const chamado = snapshot.val();
+                                    console.log("DEBUG: Dados do Chamado do Realtime DB:", chamado);
+                                    atualizarDadosChamadoUI(chamado);
+                                    carregarHistorico(chamado.interacoes || {});
+                                } else {
+                                    alert("Chamado não encontrado no banco de dados ou foi excluído.");
+                                    window.location.href = "interno_chamados.html";
+                                    console.error("ERRO: Chamado não existe no Realtime DB:", chamadoId);
+                                }
+                            }, (error) => {
+                                console.error("ERRO: Falha ao ouvir mudanças do chamado no Realtime DB:", error);
+                                alert("Erro ao carregar detalhes do chamado em tempo real. Verifique as regras de segurança do Realtime Database.");
+                            });
+
+                        } else {
+                            alert("Acesso restrito para técnicos. Redirecionando para login.");
+                            window.location.href = "login.html";
+                            console.warn("AVISO: Usuário não é técnico. Tipo:", userData.tipo);
+                        }
+                    } else {
+                        alert("Perfil de usuário não encontrado no Firestore. Redirecionando para login.");
+                        window.location.href = "login.html";
+                        console.error("ERRO: Documento do usuário não existe no Firestore para UID:", user.uid);
+                    }
+                } catch (e) {
+                    console.error("ERRO GRAVE: Falha no carregamento inicial da página de detalhes:", e);
+                    alert("Erro crítico ao carregar a página de detalhes. Verifique o console para mais informações.");
+                }
+            } else {
+                alert("Nenhum usuário logado. Redirecionando para login.");
+                window.location.href = "login.html";
+                console.warn("AVISO: Nenhum usuário autenticado.");
+            }
+        });
+
+        async function carregarChamadoPorId(id) {
+            // Esta função não é mais o principal driver de carregamento inicial
+            // O onValue já faz isso e se mantém ouvindo.
+        }
+
+        function atualizarDadosChamadoUI(chamado) {
+            const data = chamado.criadoEm ? new Date(chamado.criadoEm) : new Date();
+            dataAbertura.textContent = data.toLocaleDateString("pt-BR");
+            usuarioChamado.textContent = chamado.nomeCompleto || "N/A";
+            telefoneChamado.textContent = chamado.telefone || "N/A";
+            localChamado.textContent = chamado.local || "N/A";
+            categoriaChamado.textContent = chamado.categoria || "N/A";
+            descricaoChamado.textContent = chamado.descricao || "Nenhuma descrição fornecida.";
+
+            const atribuido = chamado.atribuidoPara || "Não Atribuído";
+            atribuidoParaChamado.textContent = atribuido;
+
+            selectStatus.value = chamado.status || "Aberto";
+            if (selectTecnico.querySelector(`option[value="${atribuido}"]`)) {
+                selectTecnico.value = atribuido;
+            } else if (atribuido !== "Não Atribuído") {
+                const option = document.createElement('option');
+                option.value = atribuido;
+                option.textContent = atribuido + " (Indisponível/Excluído)";
+                selectTecnico.appendChild(option);
+                selectTecnico.value = atribuido;
+            } else {
+                selectTecnico.value = "";
+            }
+
+            // CORREÇÃO AQUI: EXIBIR o numeroChamado no lugar do ID Firebase
+            chamadoIdDisplay.textContent = chamado.numeroChamado || chamado.id; // Se numeroChamado não existir (chamados antigos), usa o ID Firebase
+
+            console.log("DEBUG: Chamado UI atualizada. Número do Chamado:", chamado.numeroChamado);
+        }
+
+        async function carregarTecnicos() {
+            try {
+                const tecnicosRef = collection(firestore, "usuarios");
+                const q = query(tecnicosRef, where("tipo", "==", "tecnico"));
+                const querySnapshot = await getDocs(q);
+                
+                selectTecnico.innerHTML = '<option value="">Selecionar Técnico</option>';
+
+                querySnapshot.forEach((doc) => {
+                    const tecnicoData = doc.data();
+                    const option = document.createElement("option");
+                    option.value = tecnicoData.email;
+                    option.textContent = tecnicoData.nome || tecnicoData.email;
+                    selectTecnico.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar técnicos:", error);
+                alert("Não foi possível carregar a lista de técnicos.");
+            }
+        }
+
+        function carregarHistorico(interacoesObj) {
+          historicoLista.innerHTML = '';
+          const interacoesArray = [];
+
+          for (const key in interacoesObj) {
+            if (Object.hasOwnProperty.call(interacoesObj, key)) {
+              interacoesArray.push({ id: key, ...interacoesObj[key] });
+            }
+          }
+
+          if (interacoesArray.length === 0) {
+            historicoLista.innerHTML = `<div class="vazio" id="historicoVazio">Nenhuma interação ou anexo ainda.</div>`;
+            return;
+          }
+
+          interacoesArray.sort((a, b) => {
+            const dateA = new Date(a.dataHora ? a.dataHora : a.data);
+            const dateB = new Date(b.dataHora ? b.dataHora : b.data);
+            return dateA - dateB;
+          });
+
+          interacoesArray.forEach(item => {
+            const historicoItem = document.createElement('div');
+            historicoItem.classList.add('historico-item');
+
+            const dataHoraDisplay = new Date(item.dataHora ? item.dataHora : item.data).toLocaleString('pt-BR');
+            let contentHTML = '';
+            let iconClass = '';
+
+            if (item.tipo === 'nota') {
+              iconClass = 'fas fa-comment-alt';
+              contentHTML = `<p>${item.nota}</p>`;
+            } else if (item.tipo === 'anexo' && item.anexo) {
+              iconClass = 'fas fa-paperclip';
+              const fileName = item.anexo.nome || 'Arquivo Anexado';
+              const fileURL = item.anexo.url;
+              const fileType = item.anexo.tipo || '';
+
+              if (fileType.startsWith('image/')) {
+                contentHTML = `
+                  <p>Anexo: <a href="<span class="math-inline">\{fileURL\}" target\="\_blank"\></span>{fileName}</a></p>
+                  <div class="anexo-preview"><img src="${fileURL}" alt="Preview do Anexo"></div>
+                `;
+              } else if (fileType === 'application/pdf') {
+                contentHTML = `
+                  <p>Anexo: <a href="<span class="math-inline">\{fileURL\}" target\="\_blank"\></span>{fileName}</a></p>
+                  <div class="anexo-preview"><i class="fas fa-file-pdf"></i> PDF Anexado</div>
+                `;
+              } else {
+                contentHTML = `
+                  <p>Anexo: <a href="<span class="math-inline">\{fileURL\}" target\="\_blank"\></span>{fileName}</a></p>
+                  <div class="anexo-preview"><i class="fas fa-file"></i> Arquivo Anexado</div>
+                `;
+              }
+            }
+            else if (item.tipo === 'status_change') {
+                iconClass = 'fas fa-sync-alt';
+                contentHTML = `<p>Status alterado para: <strong>${item.newStatus}</strong></p>`;
+                if (item.nota) contentHTML += `<p>Nota: ${item.nota}</p>`;
+            }
+            else if (item.tipo === 'assignment_change') {
+                iconClass = 'fas fa-user-tag';
+                contentHTML = `<p>Chamado ${item.newAssignee === "Ninguém" ? "desatribuído" : `atribuído para: <strong>${item.newAssignee}</strong>`}</p>`;
+            }
+
+
+            historicoItem.innerHTML = `
+              <p><strong><i class="${iconClass}" style="margin-right: 8px;"></i>${item.tecnico || 'Desconhecido'}</strong> em ${dataHoraDisplay}</p>
+              ${contentHTML}
+            `;
+            historicoLista.appendChild(historicoItem);
+          });
+        }
+
+        selectStatus.addEventListener('change', async (event) => {
+          const novoStatus = event.target.value;
+          const confirmar = confirm(`Tem certeza que deseja mudar o status para "${novoStatus}"?`);
+          if (!confirmar) {
+            const snapshot = await get(chamadoRef);
+            if (snapshot.exists()) {
+                selectStatus.value = snapshot.val().status || "Aberto";
+            }
+            return;
+          }
+          try {
+            await update(chamadoRef, { status: novoStatus });
+            const interacaoData = {
+                tecnico: tecnicoLogadoEmail,
+                dataHora: serverTimestamp(),
+                tipo: 'status_change',
+                newStatus: novoStatus
+            };
+            await push(child(chamadoRef, 'interacoes'), interacaoData);
+            alert(`Status do chamado atualizado para "${novoStatus}" com sucesso!`);
+          } catch (error) {
+            console.error("Erro ao atualizar status:", error);
+            alert("Erro ao atualizar o status do chamado.");
+          }
+        });
+
+        selectTecnico.addEventListener('change', async (event) => {
+          const novoAtribuido = event.target.value;
+          let mensagemConfirmacao = "";
+          if (novoAtribuido === "") {
+              mensagemConfirmacao = "Tem certeza que deseja desatribuir este chamado?";
+          } else {
+              mensagemConfirmacao = `Tem certeza que deseja atribuir este chamado para "${novoAtribuido}"?`;
+          }
+
+          const confirmar = confirm(mensagemConfirmacao);
+          if (!confirmar) {
+            const snapshot = await get(chamadoRef);
+            if (snapshot.exists()) {
+                selectTecnico.value = snapshot.val().atribuidoPara || "";
+            }
+            return;
+          }
+          try {
+            await update(chamadoRef, { atribuidoPara: novoAtribuido === "" ? null : novoAtribuido });
+            const interacaoData = {
+                tecnico: tecnicoLogadoEmail,
+                dataHora: serverTimestamp(),
+                tipo: 'assignment_change',
+                newAssignee: novoAtribuido === "" ? "Ninguém" : novoAtribuido
+            };
+            await push(child(chamadoRef, 'interacoes'), interacaoData);
+            alert(`Chamado atribuído com sucesso para ${novoAtribuido || 'ninguém'}!`);
+          } catch (error) {
+            console.error("Erro ao atribuir chamado:", error);
+            alert("Erro ao atribuir o chamado.");
+          }
+        });
+
+        btnAdicionarNota.addEventListener("click", async () => {
+          const nota = textoInteracao.value.trim();
+          if (!nota) {
+            alert("Por favor, digite a nota da interação.");
+            return;
+          }
+
+          console.log("DEBUG: Tentando adicionar nota...");
+          console.log("DEBUG: Texto da nota:", nota);
+          console.log("DEBUG: Técnico logado:", tecnicoLogadoEmail);
+          console.log("DEBUG: ID do Chamado:", chamadoId);
+
+          try {
+            const interacaoData = {
+              tecnico: tecnicoLogadoEmail,
+              dataHora: serverTimestamp(),
+              nota: nota,
+              tipo: 'nota'
+            };
+            await push(child(chamadoRef, 'interacoes'), interacaoData);
+            
+            alert("Nota adicionada com sucesso!");
+            textoInteracao.value = "";
+            console.log("DEBUG: Nota adicionada com sucesso no Firebase.");
+          } catch (error) {
+            console.error("ERRO ao adicionar nota:", error);
+            alert("Erro ao adicionar nota ao chamado. Verifique o console para detalhes.");
+          }
+        });
+
+        btnAnexarArquivo.addEventListener("click", async () => {
+          const file = inputAnexo.files[0];
+          if (!file) {
+            alert("Por favor, selecione um arquivo para anexar.");
+            return;
+          }
+
+          const confirmar = confirm(`Tem certeza que deseja anexar "${file.name}"?`);
+          if (!confirmar) return;
+
+          try {
+            const caminhoNoStorage = `chamados/<span class="math-inline">\{chamadoId\}/anexos/</span>{file.name}`;
+            const arquivoRef = storageRef(storage, caminhoNoStorage);
+
+            const snapshot = await uploadBytes(arquivoRef, file);
+            const urlDownload = await getDownloadURL(snapshot.ref);
+
+            const interacaoData = {
+              tecnico: tecnicoLogadoEmail,
+              dataHora: serverTimestamp(),
+              tipo: 'anexo',
+              anexo: {
+                nome: file.name,
+                url: urlDownload,
+                tipo: file.type,
+                tamanho: file.size
+              }
+            };
+            await push(child(chamadoRef, 'interacoes'), interacaoData);
+
+            alert("Anexo enviado e registrado com sucesso!");
+            inputAnexo.value = "";
+          } catch (error) {
+            console.error("Erro ao anexar arquivo:", error);
+            alert("Erro ao anexar o arquivo. Verifique o tamanho ou formato.");
+          }
+        });
+
+        btnFecharChamado.addEventListener("click", async () => {
+          const confirmar = confirm("Tem certeza que deseja MARCAR ESTE CHAMADO COMO CONCLUÍDO?");
+          if (!confirmar) return;
+
+          try {
+            await update(chamadoRef, { status: "Concluído" });
+
+            const interacaoData = {
+                tecnico: tecnicoLogadoEmail,
+                dataHora: serverTimestamp(),
+                tipo: 'status_change',
+                newStatus: 'Concluído',
+                nota: 'Chamado marcado como Concluído pelo técnico.'
+            };
+            await push(child(chamadoRef, 'interacoes'), interacaoData);
+
+            alert("Chamado marcado como CONCLUÍDO com sucesso!");
+            window.location.href = "interno_chamados.html";
+          } catch (error) {
+            console.error("Erro ao marcar chamado como Concluído:", error);
+            alert("Erro ao marcar o chamado como Concluído.");
+          }
+        });
+    }); // FIM DO DOMContentLoaded
+</script>
+</body>
+</html>

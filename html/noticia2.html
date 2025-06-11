@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notícia - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: #0f172a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+    }
+
+    .sidebar .logo {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #1e293b;
+      color: #fff;
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .topbar h1 {
+      font-size: 22px;
+      color: #1e293b;
+    }
+
+    .content {
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .news-article {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+
+    .news-article img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .news-article h2 {
+      font-size: 24px;
+      color: #0ea5e9;
+      margin-bottom: 16px;
+    }
+
+    .news-article p {
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .topbar {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">4DeskSolutions</div>
+    <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+    <a href="../html/noticias.html" class="active"><i class="fas fa-bullhorn"></i> Anúncios</a>
+    <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+    <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Notícia</h1>
+    </div>
+    <div class="content">
+      <div class="news-article">
+        <img src="../imgs/mohammad-rahmani-oXlXu2qukGE-unsplash.jpg" alt="Atendimento 24h">
+        <h2>4DeskSolutions amplia suporte com tecnologia de ponta</h2>
+        <p>
+          A 4DeskSolutions anunciou hoje a implementação de um novo sistema de atendimento ao cliente baseado em inteligência artificial, capaz de prever falhas antes mesmo que elas aconteçam. Essa tecnologia permite que os atendimentos sejam resolvidos com mais agilidade e eficiência, oferecendo ao cliente uma experiência mais fluida e satisfatória.
+        </p>
+
+        <p>
+          O novo sistema utiliza algoritmos avançados para analisar dados em tempo real e identificar padrões que possam indicar possíveis falhas ou necessidades de manutenção preventiva. Isso reduz o tempo de inatividade dos sistemas e aumenta significativamente a produtividade das empresas atendidas.
+        </p>
+
+        <p>
+          Além disso, a plataforma conta com um assistente virtual treinado com base em milhares de atendimentos anteriores, permitindo respostas mais precisas e personalizadas para cada situação. O cliente passa a ter suporte imediato em diversos canais, como chat, e-mail e até redes sociais.
+        </p>
+
+        <p>
+          A integração com outras ferramentas de gestão também é um diferencial. Agora, é possível abrir e acompanhar chamados diretamente de sistemas parceiros, facilitando o controle das demandas e centralizando as informações em um único painel.
+        </p>
+
+        <p>
+          Segundo a equipe técnica da 4DeskSolutions, essa inovação é apenas o primeiro passo de uma série de melhorias previstas para os próximos meses. A empresa está investindo fortemente em pesquisa e desenvolvimento para manter sua posição de destaque no mercado de soluções corporativas.
+        </p>
+
+        <p>
+          Com essa ampliação no suporte, a 4DeskSolutions reforça seu compromisso com a excelência no atendimento e a inovação constante. O objetivo é oferecer não apenas respostas rápidas, mas soluções eficazes e duradouras que realmente impactem positivamente o dia a dia dos clientes.
+        </p>
+
+        <p>
+          A expectativa é que, com essa tecnologia de ponta, o índice de satisfação do cliente aumente consideravelmente, consolidando a 4DeskSolutions como uma referência em atendimento inteligente e eficiente no setor de tecnologia empresarial.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

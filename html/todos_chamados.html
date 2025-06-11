@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todos os Chamados - 4DeskSolutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/style_intchamad.css" />
+    <link rel="stylesheet" href="../css/style_tes.css">
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>4DeskSolutions</h3>
+
+            <div class="my-details">
+                <img src="https://via.placeholder.com/80" alt="Profile Image" class="profile-image" id="profileImage">
+                <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+                
+                <input type="text" id="profileNameInput" placeholder="Seu nome" readonly>
+                <p><strong>Telefone:</strong> <input type="text" id="profilePhoneInput" placeholder="Seu telefone" readonly></p>
+                <p><strong>Departamento:</strong> <input type="text" id="profileDepartmentInput" placeholder="Seu departamento" readonly></p>
+                
+                <p><strong>Email:</strong> <span id="profileEmail">N/A</span></p>
+                
+                <button class="change-image-button hidden" id="changeImageButton">Alterar Imagem</button>
+                <button class="save-details-button hidden" id="saveDetailsButton">Salvar Alterações</button>
+                <button class="edit-details-button" id="editDetailsButton">Editar Perfil</button>
+            </div>
+            <a href="interno_chamados.html">
+              <button><i class="fas fa-chart-line"></i> Chamados</button>
+            </a>
+            <button class="active"><i class="fas fa-search"></i> Todos os Chamados</button>
+            <a href="dashboard_admin.html">
+            <button><i class="fas fa-cog"></i> Dashboard</button>
+            </a>
+            <a href="../html/externo_login.html">
+                <button><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>📋 Lista Completa de Chamados</h1>
+                <div class="search-filter">
+                    <input type="text" id="searchChamado" placeholder="Buscar chamado..." />
+                    <select id="filterStatus">
+                        <option value="">Todos os Status</option>
+                        <option value="Aberto">Aberto</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Concluído">Concluído</option>
+                    </select>
+                </div>
+            </header>
+
+            <section class="section-chamados">
+                <h2 class="section-title">Todos os Chamados</h2>
+                <div id="todosChamadosBox" class="chamado-grid">
+                    </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        // Importações do Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        // Realtime Database
+        import { getDatabase, ref, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        // Firestore (para dados de usuário/perfis)
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        // Storage (for profile images)
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+        // Sua configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+            authDomain: "desksolutions-204dd.firebaseapp.com",
+            databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com", // REALTIME DATABASE URL
+            projectId: "desksolutions-204dd",
+            storageBucket: "desksolutions-204dd.appspot.com",
+            messagingSenderId: "169920163822",
+            appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app); // REALTIME DATABASE
+        const firestore = getFirestore(app); // Firestore para dados de usuário
+        const storage = getStorage(app); // Firebase Storage
+        const chamadosRef = ref(db, "chamados"); // Referência principal para a coleção de chamados no Realtime DB
+
+        // Elementos do DOM
+        const todosChamadosBox = document.getElementById("todosChamadosBox");
+        const searchChamadoInput = document.getElementById("searchChamado");
+        const filterStatusSelect = document.getElementById("filterStatus");
+
+        // My Details DOM Elements
+        const profileImage = document.getElementById('profileImage');
+        const profileNameInput = document.getElementById('profileNameInput');
+        const profilePhoneInput = document.getElementById('profilePhoneInput');
+        const profileDepartmentInput = document.getElementById('profileDepartmentInput'); // NEW: Department Input
+        const profileEmail = document.getElementById('profileEmail');
+        const imageUploadInput = document.getElementById('imageUploadInput');
+        const changeImageButton = document.getElementById('changeImageButton');
+        const saveDetailsButton = document.getElementById('saveDetailsButton');
+        const editDetailsButton = document.getElementById('editDetailsButton'); // NEW: Edit Button
+
+        let usuarioAtualEmail = null;
+        let currentUserId = null;
+        let selectedFile = null;
+
+        // NEW: Function to toggle edit mode
+        function toggleEditMode(enable) {
+            profileNameInput.readOnly = !enable;
+            profilePhoneInput.readOnly = !enable;
+            profileDepartmentInput.readOnly = !enable; // Toggle readOnly for department
+
+            // Buttons visibility
+            changeImageButton.classList.toggle('hidden', !enable);
+            saveDetailsButton.classList.toggle('hidden', !enable);
+            editDetailsButton.classList.toggle('hidden', enable);
+
+            // Also disable inputs if not enabled
+            profileNameInput.disabled = !enable;
+            profilePhoneInput.disabled = !enable;
+            profileDepartmentInput.disabled = !enable;
+        }
+
+        // Function to load and display technician details
+        async function loadTechnicianDetails(uid) {
+            console.log("DEBUG: loadTechnicianDetails - Loading details for UID:", uid);
+            currentUserId = uid;
+
+            try {
+                const userDocRef = doc(firestore, "usuarios", uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    console.log("DEBUG: loadTechnicianDetails - User data from Firestore:", userData);
+
+                    profileNameInput.value = userData.nome || "";
+                    profilePhoneInput.value = userData.telefone || "";
+                    profileDepartmentInput.value = userData.departamento || ""; // Set value for department input
+                    profileEmail.textContent = userData.email || "N/A";
+                    
+                    // Load profile image from Storage if available
+                    if (userData.profileImageUrl) {
+                        try {
+                            if (userData.profileImageUrl.startsWith('gs://') || userData.profileImageUrl.startsWith('users/')) {
+                                const imageRef = storageRef(storage, userData.profileImageUrl);
+                                const imageUrl = await getDownloadURL(imageRef);
+                                profileImage.src = imageUrl;
+                            } else {
+                                profileImage.src = userData.profileImageUrl;
+                            }
+                        } catch (imgError) {
+                            console.error("ERRO: loadTechnicianDetails - Erro ao carregar imagem do perfil:", imgError);
+                            profileImage.src = "https://via.placeholder.com/80";
+                        }
+                    } else {
+                        profileImage.src = "https://via.placeholder.com/80";
+                    }
+                    toggleEditMode(false); // Lock fields after loading
+                } else {
+                    console.warn("AVISO: loadTechnicianDetails - Perfil de usuário não encontrado no Firestore para UID:", uid);
+                    profileNameInput.value = "";
+                    profilePhoneInput.value = "";
+                    profileDepartmentInput.value = ""; // Clear department input
+                    profileEmail.textContent = "N/A";
+                    profileImage.src = "https://via.placeholder.com/80";
+                    toggleEditMode(true); // Allow editing if no profile exists
+                }
+            } catch (error) {
+                console.error("ERRO: loadTechnicianDetails - Erro ao buscar perfil do técnico:", error);
+                profileNameInput.value = "Erro";
+                profilePhoneInput.value = "Erro";
+                profileDepartmentInput.value = "Erro"; // Set error for department input
+                profileEmail.textContent = "Erro";
+                profileImage.src = "https://via.placeholder.com/80";
+                toggleEditMode(false); // Keep locked on error
+            }
+        }
+
+        // Function to save technician details
+        async function saveTechnicianDetails() {
+            if (!currentUserId) {
+                alert("Nenhum usuário logado para salvar as alterações.");
+                return;
+            }
+
+            const newName = profileNameInput.value.trim();
+            const newPhone = profilePhoneInput.value.trim();
+            const newDepartment = profileDepartmentInput.value.trim(); // Get new department value
+            let newProfileImageUrl = profileImage.src;
+
+            if (newName === "") {
+                alert("O nome não pode estar vazio.");
+                return;
+            }
+
+            // Handle image upload if a new file is selected
+            if (selectedFile) {
+                console.log("DEBUG: saveTechnicianDetails - New file selected, attempting upload.");
+                try {
+                    const imagePath = `users/${currentUserId}/profile.jpg`;
+                    const imageRef = storageRef(storage, imagePath);
+                    await uploadBytes(imageRef, selectedFile);
+                    newProfileImageUrl = await getDownloadURL(imageRef);
+                    console.log("DEBUG: saveTechnicianDetails - Image uploaded. New URL:", newProfileImageUrl);
+                } catch (error) {
+                    console.error("ERRO: saveTechnicianDetails - Erro ao fazer upload da imagem:", error);
+                    alert("Erro ao fazer upload da imagem. Tente novamente.");
+                    return;
+                }
+            }
+
+            try {
+                const userDocRef = doc(firestore, "usuarios", currentUserId);
+                await updateDoc(userDocRef, {
+                    nome: newName,
+                    telefone: newPhone,
+                    departamento: newDepartment, // Save new department
+                    profileImageUrl: newProfileImageUrl
+                });
+                alert("Detalhes salvos com sucesso!");
+                console.log("DEBUG: Detalhes do técnico atualizados no Firestore.");
+                selectedFile = null;
+                toggleEditMode(false); // Lock fields after saving
+            } catch (error) {
+                console.error("ERRO: saveTechnicianDetails - Erro ao salvar detalhes:", error);
+                alert("Erro ao salvar detalhes. Tente novamente.");
+            }
+        }
+
+        // Ouve o estado de autenticação do usuário
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                console.log("DEBUG: onAuthStateChanged - Usuário logado:", user.email);
+                try {
+                    const userDoc = await getDoc(doc(firestore, "usuarios", user.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log("DEBUG: onAuthStateChanged - Dados do usuário (Firestore):", userData);
+                        if (userData.tipo === 'tecnico') {
+                            usuarioAtualEmail = userData.email;
+                            currentUserId = user.uid;
+                            console.log("DEBUG: Usuário é um técnico. Email:", usuarioAtualEmail);
+                            await loadTechnicianDetails(user.uid);
+                            setupTodosChamadosListener();
+                        } else {
+                            alert("Acesso restrito para técnicos. Redirecionando para login.");
+                            window.location.href = "login.html";
+                            console.warn("AVISO: Usuário não é técnico. Tipo:", userData.tipo);
+                        }
+                    } else {
+                        alert("Perfil de usuário não encontrado no Firestore. Redirecionando para login.");
+                        window.location.href = "login.html";
+                        console.error("ERRO: Documento do usuário não existe no Firestore para UID:", user.uid);
+                    }
+                } catch (e) {
+                    console.error("ERRO: onAuthStateChanged - Erro ao buscar dados do usuário:", e);
+                    alert("Erro ao carregar dados do usuário. Tente novamente ou faça login.");
+                    window.location.href = "login.html";
+                }
+            } else {
+                window.location.href = "login.html";
+                console.warn("AVISO: onAuthStateChanged - Nenhum usuário autenticado.");
+            }
+        });
+
+        // Função para configurar o listener para TODOS os chamados
+        function setupTodosChamadosListener() {
+            console.log("DEBUG: setupTodosChamadosListener - Iniciando listener para todos os chamados.");
+            onValue(chamadosRef, (snapshot) => {
+                console.log("DEBUG: onValue - Dados do snapshot recebidos para Todos os Chamados.");
+                todosChamadosBox.innerHTML = '';
+
+                let chamadosCount = 0;
+
+                if (!snapshot.exists()) {
+                    todosChamadosBox.innerHTML = `<div class="vazio">🚫 Nenhum chamado encontrado.</div>`;
+                    console.log("DEBUG: onValue - Nenhum snapshot existe para Todos os Chamados.");
+                    return;
+                }
+
+                const chamados = snapshot.val();
+                console.log("DEBUG: onValue - Chamados brutos do Realtime DB:", chamados);
+
+                const chamadosArray = Object.entries(chamados).map(([id, data]) => ({ id, ...data }));
+                console.log("DEBUG: onValue - Chamados convertidos para Array:", chamadosArray);
+
+                chamadosArray.forEach((chamado) => {
+                    console.log("DEBUG: onValue - Processando chamado:", chamado.id, "Status:", chamado.status, "Atribuido:", chamado.atribuidoPara);
+                    
+                    chamado.status = chamado.status || "Aberto"; 
+
+                    const searchTerm = searchChamadoInput.value.toLowerCase();
+                    const selectedStatus = filterStatusSelect.value;
+                    console.log("DEBUG: onValue - Filtros: SearchTerm='" + searchTerm + "', SelectedStatus='" + selectedStatus + "'");
+
+                    const matchesSearch = (chamado.descricao && chamado.descricao.toLowerCase().includes(searchTerm)) ||
+                                         (chamado.categoria && chamado.categoria.toLowerCase().includes(searchTerm)) ||
+                                         (chamado.usuario && chamado.usuario.toLowerCase().includes(searchTerm)) ||
+                                         (chamado.atribuidoPara && chamado.atribuidoPara.toLowerCase().includes(searchTerm)) ||
+                                         (chamado.numeroChamado && chamado.numeroChamado.toLowerCase().includes(searchTerm));
+
+                    const matchesStatus = selectedStatus === "" || chamado.status === selectedStatus;
+
+                    if (!matchesSearch || !matchesStatus) {
+                        console.log("DEBUG: onValue - Chamado", chamado.id, "NÃO corresponde aos filtros.");
+                        return;
+                    }
+
+                    const chamadoCard = criarChamadoCard(chamado, usuarioAtualEmail);
+                    todosChamadosBox.appendChild(chamadoCard);
+                    chamadosCount++;
+                    console.log("DEBUG: onValue - Chamado", chamado.id, "adicionado à lista Todos os Chamados.");
+                });
+
+                if (chamadosCount === 0) {
+                    todosChamadosBox.innerHTML = `<div class="vazio">🚫 Nenhum chamado encontrado com os filtros aplicados.</div>`;
+                }
+                console.log("DEBUG: onValue - Finalizado. Total de Chamados exibidos:", chamadosCount);
+            }, (error) => {
+                console.error("ERRO: setupTodosChamadosListener - Erro ao ouvir chamados:", error);
+                todosChamadosBox.innerHTML = `<div class="vazio">Erro ao carregar chamados.</div>`;
+            });
+        }
+
+        // Função para criar o HTML de um item de chamado (AGORA COMO ITEM DE LISTA)
+        function criarChamadoCard(chamado, usuarioEmail) {
+            const data = chamado.criadoEm ? new Date(chamado.criadoEm) : new Date();
+            const dataFormatada = data.toLocaleDateString("pt-BR");
+
+            const box = document.createElement("div");
+            box.classList.add("chamado-box");
+
+            let statusDisplay = chamado.status || 'Aberto';
+            let statusClass = '';
+            switch (statusDisplay) {
+                case 'Aberto': statusClass = 'status-aberto'; break;
+                case 'Em Andamento': statusClass = 'status-em-andamento'; break;
+                case 'Concluído': statusClass = 'status-concluido'; break;
+                case 'Pendente': statusClass = 'status-pendente'; break;
+                default: statusClass = 'status-aberto'; break;
+            }
+
+            box.innerHTML = `
+                <h4>#${chamado.numeroChamado || "N/A"}</h4>
+                <div class="info-group">
+                    <p><strong>Usuário:</strong> ${chamado.usuario || "Desconhecido"}</p>
+                    <p><strong>Data:</strong> ${dataFormatada}</p>
+                </div>
+                <p class="descricao-resumo">${(chamado.descricao || "Sem descrição").slice(0, 100)}...</p>
+                <p class="status-tag ${statusClass}">Status: ${statusDisplay}</p>
+            `;
+
+            box.addEventListener("click", () => {
+                console.log("DEBUG: Clicando no chamado com ID:", chamado.id);
+                window.location.href = `interno_detalhe_chamado.html?id=${chamado.id}`;
+            });
+
+            return box;
+        }
+
+        // Event Listeners para filtros
+        searchChamadoInput.addEventListener('input', () => {
+            if (usuarioAtualEmail) {
+                setupTodosChamadosListener();
+            }
+        });
+
+        filterStatusSelect.addEventListener('change', () => {
+            if (usuarioAtualEmail) {
+                setupTodosChamadosListener();
+            }
+        });
+
+        // Event Listeners for profile editing
+        changeImageButton.addEventListener('click', () => {
+            imageUploadInput.click();
+        });
+
+        imageUploadInput.addEventListener('change', (event) => {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        });
+
+        saveDetailsButton.addEventListener('click', saveTechnicianDetails);
+        editDetailsButton.addEventListener('click', () => toggleEditMode(true)); // NEW: Edit button event
+    </script>
+</body>
+</html>

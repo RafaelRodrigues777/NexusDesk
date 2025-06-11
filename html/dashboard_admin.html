@@ -1,0 +1,699 @@
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard do Administrador - 4DeskSolutions</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="../css/style_dashboard_admin.css" />
+    </head>
+    <body>
+        <div class="container">
+            <aside class="sidebar">
+                <h3>4DeskSolutions</h3>
+                <div class="my-profile">
+                    <img src="https://via.placeholder.com/80" alt="Profile Image" class="profile-image" id="profileImage">
+                    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+                    
+                    <input type="text" id="profileNameInput" placeholder="Seu nome" readonly>
+                    <p><strong>Telefone:</strong> <input type="text" id="profilePhoneInput" placeholder="Seu telefone" readonly></p>
+                    <p><strong>Departamento:</strong> <input type="text" id="profileDepartmentInput" placeholder="Seu departamento" readonly></p>
+                    
+                    <p><strong>Email:</strong> <span id="profileEmail">N/A</span></p>
+                    
+                    <button class="change-image-button hidden" id="changeImageButton">Alterar Imagem</button>
+                    <button class="save-details-button hidden" id="saveDetailsButton">Salvar Alterações</button>
+                    <button class="edit-details-button" id="editDetailsButton">Editar Perfil</button>
+                </div>
+                <a href="interno_chamados.html">
+                <button><i class="fas fa-chart-line"></i> Chamados</button>
+                </a>
+                <a href="cadastro.html">
+                <button><i class="fas fa-chart-line"></i> Cadastro</button>
+                </a>
+
+                <button onclick="window.location.href='todos_chamados.html'"> <i class="fas fa-clipboard-list"></i> Todos os Chamados
+                </button>
+
+                <a href="dashboard_admin.html">
+                <button class="active"><i class="fas fa-chart-line"></i> Chamados</button>
+                </a>
+                <a href="../html/index_copy.html">
+                    <button><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </a>
+                
+            </aside>
+
+            <main class="main-content">
+                <header class="main-header">
+                    <h1>Painel de Controle do Administrador</h1>
+                    <div class="header-actions">
+                        <div class="search-filter">
+                            <input type="text" id="searchChamado" placeholder="Buscar chamado (Empresa, N°)..." />
+                            <select id="filterStatus">
+                                <option value="">Todos os Status</option>
+                                <option value="Aberto">Aberto</option>
+                                <option value="Em Andamento">Em Andamento</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Concluído">Concluído</option>
+                            </select>
+                            <select id="filterEmpresa">
+                                <option value="">Todas as Empresas</option>
+                            </select>
+                        </div>
+                        <button id="addCompanyButton" class="add-company-btn"><i class="fas fa-plus"></i> Adicionar Empresa</button>
+                    </div>
+                </header>
+
+                <section class="section-chamados">
+                    <h2 class="section-title">📊 Todos os Chamados Abertos e em Andamento</h2>
+                    <div id="allOpenChamadosBox" class="chamado-grid">
+                        <div class="vazio">Carregando chamados...</div>
+                    </div>
+                </section>
+
+                <hr class="divider" />
+
+                <section class="section-chamados">
+                    <h2 class="section-title">🔔 Chamados Pendentes (Atenção!)</h2>
+                    <div id="pendingChamadosBox" class="chamado-grid">
+                        <div class="vazio">Carregando chamados pendentes...</div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <a href="interno_chamados.html" class="close-button">&times;</a>
+                <h2>Acesso de Administrador / Empresa</h2>
+                <p>Insira a senha de acesso para esta área restrita.</p>
+                <form id="adminAccessForm">
+                    <label for="accessPassword">Senha de Acesso:</label>
+                    <input type="password" id="accessPassword" required>
+                    <button type="submit" id="modalAccessButton">Acessar</button>
+                </form>
+                <p id="modalLoginError" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="addCompanyModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeAddCompanyModalBtn">&times;</span>
+                <h2>Adicionar Nova Empresa</h2>
+                <form id="companyRegistrationForm">
+                    <label for="companyName">Nome da Empresa:</label>
+                    <input type="text" id="companyName" placeholder="Ex: Tech Solutions Ltda." required>
+
+                    <label for="companyCnpj">CNPJ:</label>
+                    <input type="text" id="companyCnpj" placeholder="Ex: 00.000.000/0000-00" maxlength="18" required>
+
+                    <label for="companyAddress">Endereço:</label>
+                    <input type="text" id="companyAddress" placeholder="Ex: Av. Principal, 123, Centro" required>
+
+                    <label for="companyContactEmail">E-mail de Contato:</label>
+                    <input type="email" id="companyContactEmail" placeholder="Ex: contato@empresa.com" required>
+
+                    <label for="companyContactPhone">Telefone de Contato:</label>
+                    <input type="tel" id="companyContactPhone" placeholder="Ex: (XX) XXXX-XXXX ou (XX) XXXXX-XXXX" maxlength="15" required>
+
+                    <button type="submit">Cadastrar Empresa</button>
+                    <div id="registrationMessage" class="message" style="display: none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <script type="module">
+            // Importações do Firebase SDK
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; 
+            import { getDatabase, ref, onValue, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+            import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+            import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+            // Sua configuração do Firebase (Mantenha a mesma do seu projeto)
+            const firebaseConfig = {
+                apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+                authDomain: "desksolutions-204dd.firebaseapp.com",
+                databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+                projectId: "desksolutions-204dd",
+                storageBucket: "desksolutions-204dd.appspot.com",
+                messagingSenderId: "169920163822",
+                appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+            };
+
+            // Inicializa o Firebase
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getDatabase(app);
+            const firestore = getFirestore(app);
+            const storage = getStorage(app);
+            const chamadosRef = ref(db, "chamados");
+
+            // --- SENHA DE ACESSO SECRETA (ATENÇÃO: ESTA SENHA FICA EXPOSTA NO CÓDIGO FONTE DO NAVEGADOR) ---
+            const ADMIN_ACCESS_PASSWORD = 'Admin777'; 
+            // --- FIM DA SENHA DE ACESSO ---
+
+            // Elementos do DOM (Chamados)
+            const allOpenChamadosBox = document.getElementById("allOpenChamadosBox");
+            const pendingChamadosBox = document.getElementById("pendingChamadosBox");
+            const searchChamadoInput = document.getElementById("searchChamado");
+            const filterStatusSelect = document.getElementById("filterStatus");
+            const filterEmpresaSelect = document.getElementById("filterEmpresa");
+            
+            // Elementos do DOM (Meu Perfil)
+            const myProfileSection = document.querySelector('.my-profile');
+            const profileImage = document.getElementById('profileImage');
+            const profileNameInput = document.getElementById('profileNameInput');
+            const profilePhoneInput = document.getElementById('profilePhoneInput');
+            const profileDepartmentInput = document.getElementById('profileDepartmentInput');
+            const profileEmail = document.getElementById('profileEmail');
+            const imageUploadInput = document.getElementById('imageUploadInput');
+            const changeImageButton = document.getElementById('changeImageButton');
+            const saveDetailsButton = document.getElementById('saveDetailsButton');
+            const editDetailsButton = document.getElementById('editDetailsButton');
+
+            // Elementos do DOM (Modal de Acesso)
+            const loginModal = document.getElementById('loginModal');
+            const closeButton = document.querySelector('.close-button'); // Este é o close do modal de login
+            const adminAccessForm = document.getElementById('adminAccessForm');
+            const accessPasswordInput = document.getElementById('accessPassword');
+            const modalAccessButton = document.getElementById('modalAccessButton');
+            const modalLoginError = document.getElementById('modalLoginError');
+
+            // Elementos do DOM (Modal de Adicionar Empresa)
+            const addCompanyModal = document.getElementById('addCompanyModal');
+            const closeAddCompanyModalBtn = document.getElementById('closeAddCompanyModalBtn');
+            const addCompanyButton = document.getElementById('addCompanyButton');
+            const companyRegistrationForm = document.getElementById('companyRegistrationForm');
+            const companyNameInput = document.getElementById('companyName');
+            const companyCnpjInput = document.getElementById('companyCnpj');
+            const companyAddressInput = document.getElementById('companyAddress');
+            const companyContactEmailInput = document.getElementById('companyContactEmail');
+            const companyContactPhoneInput = document.getElementById('companyContactPhone');
+            const registrationMessage = document.getElementById('registrationMessage');
+
+
+            let currentUserId = null;
+            let selectedFile = null;
+
+            // --- Funções de Controle de UI ---
+            function enableDashboardUI() {
+                document.querySelector('.main-content').style.display = 'block';
+                myProfileSection.style.display = 'block';
+                document.querySelector('.sidebar').style.display = 'flex'; 
+            }
+
+            function disableDashboardUI() {
+                document.querySelector('.main-content').style.display = 'none';
+                myProfileSection.style.display = 'none';
+                document.querySelector('.sidebar').style.display = 'none'; 
+            }
+
+            // --- Funções de Perfil ---
+            function toggleEditMode(enable) {
+                profileNameInput.readOnly = !enable;
+                profilePhoneInput.readOnly = !enable;
+                profileDepartmentInput.readOnly = !enable;
+
+                changeImageButton.classList.toggle('hidden', !enable);
+                saveDetailsButton.classList.toggle('hidden', !enable);
+                editDetailsButton.classList.toggle('hidden', enable);
+
+                profileNameInput.disabled = !enable;
+                profilePhoneInput.disabled = !enable;
+                profileDepartmentInput.disabled = !enable;
+            }
+
+            async function loadProfileDetails(uid) {
+                console.log("DEBUG: loadProfileDetails - Loading details for UID:", uid);
+                currentUserId = uid;
+
+                try {
+                    const userDocRef = doc(firestore, "usuarios", uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log("DEBUG: loadProfileDetails - User data from Firestore:", userData);
+
+                        profileNameInput.value = userData.nome || "";
+                        profilePhoneInput.value = userData.telefone || "";
+                        profileDepartmentInput.value = userData.departamento || "";
+                        profileEmail.textContent = userData.email || "N/A";
+                        
+                        if (userData.profileImageUrl) {
+                            try {
+                                if (userData.profileImageUrl.startsWith('gs://') || userData.profileImageUrl.startsWith('users/')) {
+                                    const imageRef = storageRef(storage, userData.profileImageUrl);
+                                    const imageUrl = await getDownloadURL(imageRef);
+                                    profileImage.src = imageUrl;
+                                } else {
+                                    profileImage.src = userData.profileImageUrl;
+                                }
+                            } catch (imgError) {
+                                console.error("ERRO: loadProfileDetails - Erro ao carregar imagem do perfil:", imgError);
+                                profileImage.src = "https://via.placeholder.com/80";
+                            }
+                        } else {
+                            profileImage.src = "https://via.placeholder.com/80";
+                        }
+                        toggleEditMode(false);
+                    } else {
+                        console.warn("AVISO: loadProfileDetails - Perfil de usuário não encontrado no Firestore para UID:", uid);
+                        profileNameInput.value = "";
+                        profilePhoneInput.value = "";
+                        profileDepartmentInput.value = "";
+                        profileEmail.textContent = "N/A";
+                        profileImage.src = "https://via.placeholder.com/80";
+                        toggleEditMode(true);
+                    }
+                } catch (error) {
+                    console.error("ERRO: loadProfileDetails - Erro ao buscar perfil:", error);
+                    profileNameInput.value = "Erro";
+                    profilePhoneInput.value = "Erro";
+                    profileDepartmentInput.value = "Erro";
+                    profileEmail.textContent = "Erro";
+                    profileImage.src = "https://via.placeholder.com/80";
+                    toggleEditMode(false);
+                }
+            }
+
+            async function saveProfileDetails() {
+                if (!currentUserId) {
+                    alert("Nenhum usuário logado para salvar as alterações.");
+                    return;
+                }
+
+                const newName = profileNameInput.value.trim();
+                const newPhone = profilePhoneInput.value.trim();
+                const newDepartment = profileDepartmentInput.value.trim();
+                let newProfileImageUrl = profileImage.src;
+
+                if (newName === "") {
+                    alert("O nome não pode estar vazio.");
+                    return;
+                }
+
+                if (selectedFile) {
+                    console.log("DEBUG: saveProfileDetails - New file selected, attempting upload.");
+                    try {
+                        const imagePath = `users/${currentUserId}/profile.jpg`;
+                        const imageRef = storageRef(storage, imagePath);
+                        await uploadBytes(imageRef, selectedFile);
+                        newProfileImageUrl = await getDownloadURL(imageRef);
+                        console.log("DEBUG: saveProfileDetails - Image uploaded. New URL:", newProfileImageUrl);
+                    } catch (error) {
+                        console.error("ERRO: saveProfileDetails - Erro ao fazer upload da imagem:", error);
+                        alert("Erro ao fazer upload da imagem. Tente novamente.");
+                        return;
+                    }
+                }
+
+                try {
+                    const userDocRef = doc(firestore, "usuarios", currentUserId);
+                    await updateDoc(userDocRef, {
+                        nome: newName,
+                        telefone: newPhone,
+                        departamento: newDepartment,
+                        profileImageUrl: newProfileImageUrl
+                    });
+                    alert("Detalhes salvos com sucesso!");
+                    console.log("DEBUG: Detalhes do perfil atualizados no Firestore.");
+                    selectedFile = null;
+                    toggleEditMode(false);
+                } catch (error) {
+                    console.error("ERRO: saveProfileDetails - Erro ao salvar detalhes:", error);
+                    alert("Erro ao salvar detalhes. Tente novamente.");
+                }
+            }
+            // --- Fim das Funções de Perfil ---
+
+
+            // Carrega empresas para o filtro
+            async function loadCompaniesForFilter() {
+                try {
+                    const companiesCollection = collection(firestore, "empresas");
+                    const companiesSnapshot = await getDocs(companiesCollection);
+                    
+                    filterEmpresaSelect.innerHTML = '<option value="">Todas as Empresas</option>';
+                    companiesSnapshot.forEach(doc => {
+                        const companyData = doc.data();
+                        const option = document.createElement('option');
+                        option.value = companyData.nome;
+                        option.textContent = companyData.nome;
+                        filterEmpresaSelect.appendChild(option);
+                    });
+                    console.log("DEBUG: Empresas carregadas para o filtro.");
+                } catch (error) {
+                    console.error("ERRO: loadCompaniesForFilter - Erro ao carregar empresas:", error);
+                }
+            }
+
+            // --- Funções do Modal de Acesso ---
+            function showAccessModal(errorMessage = '') {
+                disableDashboardUI();
+                loginModal.style.display = 'flex';
+                modalLoginError.textContent = errorMessage;
+                accessPasswordInput.focus();
+            }
+
+            function hideAccessModal() {
+                loginModal.style.display = 'none';
+                modalLoginError.textContent = '';
+                adminAccessForm.reset();
+            }
+
+            async function handleAdminAccess(event) {
+                event.preventDefault();
+
+                const enteredPassword = accessPasswordInput.value.trim();
+                modalLoginError.textContent = '';
+
+                if (enteredPassword !== ADMIN_ACCESS_PASSWORD) {
+                    modalLoginError.textContent = 'Senha de acesso incorreta.';
+                    console.warn("AVISO: Tentativa de acesso com senha incorreta.");
+                    return;
+                }
+
+                const user = auth.currentUser; 
+                if (!user) {
+                    modalLoginError.textContent = 'Erro: Nenhum usuário logado no Firebase. Por favor, recarregue a página ou faça login normal primeiro.';
+                    console.error("ERRO: handleAdminAccess - Senha correta, mas sem usuário autenticado no Firebase.");
+                    return;
+                }
+
+                console.log("Acesso concedido pela senha de acesso para o usuário:", user.email);
+                hideAccessModal();
+                enableDashboardUI(); 
+
+                await loadProfileDetails(user.uid); 
+                loadCompaniesForFilter();
+                setupDashboardChamadosListener();
+            }
+            // --- Fim das Funções do Modal de Acesso ---
+
+            // --- Funções do Modal de Adicionar Empresa ---
+            function showAddCompanyModal() {
+                addCompanyModal.style.display = 'flex';
+                companyRegistrationForm.reset(); 
+                registrationMessage.style.display = 'none'; 
+                registrationMessage.textContent = '';
+                companyNameInput.focus();
+            }
+
+            function hideAddCompanyModal() {
+                addCompanyModal.style.display = 'none';
+            }
+
+            // Função para formatar CNPJ
+            function formatCnpj(value) {
+                value = value.replace(/\D/g, ""); 
+                value = value.replace(/^(\d{2})(\d)/, "$1.$2"); 
+                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3"); 
+                value = value.replace(/\.(\d{3})(\d)/, ".$1/$2"); 
+                value = value.replace(/(\d{4})(\d)/, "$1-$2"); 
+                return value;
+            }
+
+            // Função para formatar Telefone
+            function formatPhone(value) {
+                value = value.replace(/\D/g, ""); 
+                if (value.length > 10) { 
+                    value = value.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
+                } else if (value.length > 5) { 
+                    value = value.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+                } else if (value.length > 2) { 
+                    value = value.replace(/^(\d\d)(\d+)/, "($1) $2");
+                }
+                return value;
+            }
+
+            async function registerCompany(event) {
+                event.preventDefault();
+
+                const companyName = companyNameInput.value.trim();
+                const companyCnpj = companyCnpjInput.value.trim();
+                const companyAddress = companyAddressInput.value.trim();
+                const companyContactEmail = companyContactEmailInput.value.trim();
+                const companyContactPhone = companyContactPhoneInput.value.trim();
+
+                registrationMessage.style.display = 'none';
+                registrationMessage.classList.remove('success', 'error');
+
+                if (!companyName || !companyCnpj || !companyAddress || !companyContactEmail || !companyContactPhone) {
+                    registrationMessage.textContent = 'Por favor, preencha todos os campos.';
+                    registrationMessage.classList.add('error');
+                    registrationMessage.style.display = 'block';
+                    return;
+                }
+
+                if (companyCnpj.replace(/\D/g, "").length !== 14) {
+                    registrationMessage.textContent = 'CNPJ inválido. Deve conter 14 dígitos.';
+                    registrationMessage.classList.add('error');
+                    registrationMessage.style.display = 'block';
+                    return;
+                }
+
+                try {
+                    const companiesRef = collection(firestore, "empresas");
+                    const querySnapshot = await getDocs(companiesRef);
+                    const existingCompanies = querySnapshot.docs.map(doc => doc.data());
+
+                    const nameExists = existingCompanies.some(company => company.nome.toLowerCase() === companyName.toLowerCase());
+                    const cnpjExists = existingCompanies.some(company => company.cnpj === companyCnpj);
+
+                    if (nameExists) {
+                        registrationMessage.textContent = 'Já existe uma empresa com este nome.';
+                        registrationMessage.classList.add('error');
+                        registrationMessage.style.display = 'block';
+                        return;
+                    }
+                    if (cnpjExists) {
+                        registrationMessage.textContent = 'Já existe uma empresa com este CNPJ.';
+                        registrationMessage.classList.add('error');
+                        registrationMessage.style.display = 'block';
+                        return;
+                    }
+
+                    await addDoc(companiesRef, {
+                        nome: companyName,
+                        cnpj: companyCnpj,
+                        endereco: companyAddress,
+                        emailContato: companyContactEmail,
+                        telefoneContato: companyContactPhone,
+                        criadoEm: serverTimestamp()
+                    });
+
+                    registrationMessage.textContent = 'Empresa cadastrada com sucesso!';
+                    registrationMessage.classList.add('success');
+                    registrationMessage.style.display = 'block';
+                    companyRegistrationForm.reset(); 
+
+                    loadCompaniesForFilter();
+
+                } catch (error) {
+                    console.error("Erro ao cadastrar empresa:", error);
+                    registrationMessage.textContent = 'Erro ao cadastrar empresa. Tente novamente.';
+                    registrationMessage.classList.add('error');
+                    registrationMessage.style.display = 'block';
+                }
+            }
+            // --- Fim das Funções do Modal de Adicionar Empresa ---
+
+
+            // Ouve o estado de autenticação do usuário ANTES de carregar a UI
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    try {
+                        const userDoc = await getDoc(doc(firestore, "usuarios", user.uid));
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            if (userData.tipo === 'admin' || userData.tipo === 'empresa') {
+                                console.log("Usuário logado e verificado (Admin ou Empresa - acesso direto):", user.email);
+                                hideAccessModal();
+                                enableDashboardUI();
+                                await loadProfileDetails(user.uid);
+                                loadCompaniesForFilter();
+                                setupDashboardChamadosListener();
+                            } else {
+                                console.warn("AVISO: Usuário logado é do tipo '" + userData.tipo + "'. Solicitando senha de acesso para dashboard admin.");
+                                showAccessModal('Sua conta não tem permissão direta. Digite a senha de acesso para esta área.');
+                            }
+                        } else {
+                            console.error("ERRO: Usuário logado, mas perfil não encontrado no Firestore. Solicitando senha de acesso.");
+                            showAccessModal('Seu perfil não foi encontrado. Insira a senha de acesso se for administrador/empresa.');
+                        }
+                    } catch (e) {
+                        console.error("Erro ao buscar dados do usuário na inicialização da página:", e);
+                        showAccessModal('Erro ao carregar dados do usuário. Tente novamente.');
+                    }
+                } else {
+                    console.log("Nenhum usuário Firebase autenticado. Solicitando senha de acesso para dashboard admin.");
+                    showAccessModal('Você precisa estar logado e inserir a senha de acesso para esta área.');
+                }
+            });
+
+
+            // Função para configurar o listener de chamados para o Dashboard do Admin
+            function setupDashboardChamadosListener() {
+                onValue(chamadosRef, (snapshot) => {
+                    allOpenChamadosBox.innerHTML = '';
+                    pendingChamadosBox.innerHTML = '';
+
+                    let allOpenCount = 0;
+                    let pendingCount = 0;
+
+                    if (!snapshot.exists()) {
+                        allOpenChamadosBox.innerHTML = `<div class="vazio">🚫 Nenhum chamado encontrado.</div>`;
+                        pendingChamadosBox.innerHTML = `<div class="vazio">🔔 Nenhum chamado pendente.</div>`;
+                        return;
+                    }
+
+                    const chamados = snapshot.val();
+                    const chamadosArray = Object.entries(chamados).map(([id, data]) => ({ id, ...data }));
+
+                    chamadosArray.forEach((chamado) => {
+                        chamado.status = chamado.status || 'Aberto'; 
+
+                        const searchTerm = searchChamadoInput.value.toLowerCase();
+                        const matchesSearch = (chamado.descricao && chamado.descricao.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.categoria && chamado.categoria.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.usuario && chamado.usuario.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.nomeCompleto && chamado.nomeCompleto.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.atribuidoPara && chamado.atribuidoPara.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.numeroChamado && chamado.numeroChamado.toLowerCase().includes(searchTerm)) ||
+                                                (chamado.empresa && chamado.empresa.toLowerCase().includes(searchTerm));
+
+                        const selectedStatus = filterStatusSelect.value;
+                        const matchesStatus = selectedStatus === "" || chamado.status === selectedStatus;
+
+                        const selectedEmpresa = filterEmpresaSelect.value;
+                        const matchesEmpresa = selectedEmpresa === "" || (chamado.empresa && chamado.empresa === selectedEmpresa);
+
+                        if (!matchesSearch || !matchesStatus || !matchesEmpresa) {
+                            return;
+                        }
+
+                        const chamadoCard = criarChamadoCard(chamado);
+
+                        if (chamado.status === "Aberto" || chamado.status === "Em Andamento") {
+                            allOpenChamadosBox.appendChild(chamadoCard);
+                            allOpenCount++;
+                        }
+                        
+                        if (chamado.status === "Pendente") {
+                            pendingChamadosBox.appendChild(chamadoCard);
+                            pendingCount++;
+                        }
+                    });
+
+                    if (allOpenCount === 0) {
+                        allOpenChamadosBox.innerHTML = `<div class="vazio">🎉 Não há chamados Abertos ou Em Andamento com os filtros aplicados.</div>`;
+                    }
+                    if (pendingCount === 0) {
+                        pendingChamadosBox.innerHTML = `<div class="vazio">✅ Nenhum chamado Pendente com os filtros aplicados.</div>`;
+                    }
+                }, (error) => {
+                    console.error("Erro ao ouvir chamados para o Dashboard Admin:", error);
+                    allOpenChamadosBox.innerHTML = `<div class="vazio">Erro ao carregar chamados.</div>`;
+                    pendingChamadosBox.innerHTML = `<div class="vazio">Erro ao carregar chamados.</div>`;
+                });
+            }
+
+            // Função para criar o HTML de um item de chamado para o Dashboard
+            function criarChamadoCard(chamado) {
+                const data = chamado.criadoEm ? new Date(chamado.criadoEm) : new Date();
+                const dataFormatada = data.toLocaleDateString("pt-BR");
+
+                const box = document.createElement("div");
+                box.classList.add("chamado-box");
+
+                let statusDisplay = chamado.status || 'Aberto';
+                let statusClass = '';
+                switch (statusDisplay) {
+                    case 'Aberto': statusClass = 'status-aberto'; break;
+                    case 'Em Andamento': statusClass = 'status-em-andamento'; break;
+                    case 'Concluído': statusClass = 'status-concluido'; break;
+                    case 'Pendente': statusClass = 'status-pendente'; break;
+                    default: statusClass = 'status-aberto'; break;
+                }
+
+                box.innerHTML = `
+                    <h4>#${chamado.numeroChamado || "N/A"} - ${chamado.categoria || "Sem Categoria"}</h4>
+                    <p><strong>Empresa:</strong> ${chamado.empresa || "N/A"}</p>
+                    <p><strong>Usuário:</strong> ${chamado.nomeCompleto || chamado.usuario || "Desconhecido"}</p>
+                    <p><strong>Atribuído a:</strong> ${chamado.atribuidoPara || "Ninguém"}</p>
+                    <p><strong>Data:</strong> ${dataFormatada}</p>
+                    <p class="descricao-resumo">${(chamado.descricao || "Sem descrição").slice(0, 100)}...</p>
+                    <p class="status-tag ${statusClass}">Status: ${statusDisplay}</p>
+                    <button>Ver Detalhes</button>
+                `;
+
+                box.querySelector('button').addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    window.location.href = `interno_detalhe_chamado.html?id=${chamado.id}`;
+                });
+                box.addEventListener("click", () => {
+                    window.location.href = `interno_detalhe_chamado.html?id=${chamado.id}`;
+                });
+
+                return box;
+            }
+
+            // Event Listeners para filtros
+            searchChamadoInput.addEventListener('input', setupDashboardChamadosListener);
+            filterStatusSelect.addEventListener('change', setupDashboardChamadosListener);
+            filterEmpresaSelect.addEventListener('change', setupDashboardChamadosListener);
+
+            // Event Listeners for Meu Perfil editing
+            changeImageButton.addEventListener('click', () => {
+                imageUploadInput.click();
+            });
+
+            imageUploadInput.addEventListener('change', (event) => {
+                selectedFile = event.target.files[0];
+                if (selectedFile) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profileImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(selectedFile);
+                }
+            });
+
+            saveDetailsButton.addEventListener('click', saveProfileDetails);
+            editDetailsButton.addEventListener('click', () => toggleEditMode(true));
+
+            // Event Listeners do Modal de Acesso
+            closeButton.addEventListener('click', hideAccessModal);
+            window.addEventListener('click', (event) => {
+                if (event.target == loginModal) {
+                    hideAccessModal();
+                }
+            });
+            adminAccessForm.addEventListener('submit', handleAdminAccess);
+
+            // Event Listeners para o Modal de Adicionar Empresa
+            addCompanyButton.addEventListener('click', showAddCompanyModal);
+            closeAddCompanyModalBtn.addEventListener('click', hideAddCompanyModal);
+            companyRegistrationForm.addEventListener('submit', registerCompany);
+
+            // Adiciona listeners para formatação de CNPJ e Telefone
+            companyCnpjInput.addEventListener('input', (e) => {
+                e.target.value = formatCnpj(e.target.value);
+            });
+            companyContactPhoneInput.addEventListener('input', (e) => {
+                e.target.value = formatPhone(e.target.value);
+            });
+
+            // Opcional: Fechar modal clicando fora
+            window.addEventListener('click', (event) => {
+                if (event.target == addCompanyModal) {
+                    hideAddCompanyModal();
+                }
+            });
+        </script>
+    </body>
+    </html>

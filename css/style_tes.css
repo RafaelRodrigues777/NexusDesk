@@ -1,0 +1,521 @@
+
+:root {
+    --primary-color: #007bff; /* Azul vibrante */
+    --secondary-color: #6c757d; /* Cinza médio */
+    --text-dark: #343a40; /* Quase preto */
+    --text-light: #f8f9fa; /* Cinza muito claro */
+    --background-light: #f8f9fa; /* Fundo principal */
+    --card-background: #ffffff; /* Fundo dos items da lista */
+    --border-color: #e0e0e0; /* Borda suave */
+    --shadow-color: rgba(0, 0, 0, 0.05); /* Sombra leve */
+
+    /* Cores de Status */
+    --status-open: #ffc107; /* Amarelo */
+    --status-in-progress: #007bff; /* Azul */
+    --status-completed: #28a745; /* Verde */
+    --status-pending: #6c757d; /* Cinza */
+
+    /* Cores da sidebar */
+    --sidebar-bg: #0f172a;
+    --sidebar-text-color: #cbd5e1;
+    --sidebar-hover-bg: #1e293b;
+    --sidebar-brand-color: #38bdf8;
+}
+
+/* Reset Básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Layout Principal com CSS Grid */
+.container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: #fff;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar h3 {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--sidebar-brand-color);
+    margin-bottom: 30px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.sidebar button,
+.sidebar a button {
+    background: none;
+    border: none;
+    color: var(--sidebar-text-color);
+    text-align: left;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 600;
+}
+
+.sidebar button i,
+.sidebar a button i {
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+.sidebar button:hover,
+.sidebar a button:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: #fff;
+}
+
+.sidebar button.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* New CSS for My Details section in sidebar */
+.my-details {
+    background-color: var(--sidebar-hover-bg); /* A slightly different background */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--sidebar-text-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.my-details .profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ccc; /* Placeholder color */
+    margin: 0 auto 10px auto;
+    display: block;
+    object-fit: cover;
+    border: 3px solid var(--sidebar-brand-color);
+}
+
+.my-details h4 {
+    color: #fff;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.my-details p {
+    font-size: 0.85em;
+    margin-bottom: 3px;
+    word-break: break-word; /* Prevents long emails from overflowing */
+}
+
+/* Style for editable fields */
+.my-details input[type="text"] {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    color: #fff;
+    padding: 5px 8px;
+    margin: 2px 0;
+    width: calc(100% - 16px); /* Adjust for padding */
+    font-size: 0.85em;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Style for locked/disabled fields */
+.my-details input[type="text"][readonly] {
+    background-color: rgba(255, 255, 255, 0.05); /* Lighter background for read-only */
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: default; /* Not indicating editable */
+}
+.my-details input[type="text"][disabled] {
+    opacity: 0.7; /* Slightly faded */
+}
+
+
+.my-details .change-image-button,
+.my-details .save-details-button,
+.my-details .edit-details-button { /* Added edit button */
+    background-color: #ff9800; /* Orange similar to the image */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    width: auto; /* Make button size flexible */
+    display: inline-block; /* Allow multiple buttons side-by-side */
+    margin: 5px;
+}
+
+.my-details .change-image-button:hover,
+.my-details .save-details-button:hover,
+.my-details .edit-details-button:hover {
+    background-color: #e68900;
+}
+
+.my-details .save-details-button {
+    background-color: var(--primary-color); /* Use primary color for save */
+}
+
+.my-details .save-details-button:hover {
+    background-color: #0056b3;
+}
+
+.my-details .edit-details-button {
+    background-color: #28a745; /* Green for edit */
+}
+
+.my-details .edit-details-button:hover {
+    background-color: #218838;
+}
+
+/* Hide elements when not in edit mode (initially hidden Save and Change Image) */
+.my-details .save-details-button.hidden,
+.my-details .change-image-button.hidden {
+    display: none;
+    opacity: 0; /* Animate opacity for a smoother transition */
+}
+/* Show edit button when not in edit mode */
+.my-details .edit-details-button.hidden {
+    display: none;
+    opacity: 0;
+}
+
+
+/* Conteúdo Principal */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    overflow-y: auto;
+    background-color: var(--background-light);
+}
+
+/* Cabeçalho Principal */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.main-header h1 {
+    font-size: 2.2em;
+    color: var(--text-dark);
+    margin: 0;
+    font-weight: 700;
+}
+
+/* Busca e Filtro */
+.search-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-filter input,
+.search-filter select {
+    padding: 12px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95em;
+    color: var(--text-dark);
+    background-color: var(--card-background);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-filter input:focus,
+.search-filter select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* Títulos de Seção */
+.section-title {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+}
+
+.section-title i {
+    color: var(--primary-color);
+}
+
+/* --- Container de Chamados (AGORA COMO LISTA) --- */
+.chamado-grid { /* Mantive o nome da classe HTML, mas o comportamento é de lista */
+    display: flex; /* Mudado para flexbox */
+    flex-direction: column; /* Itens um abaixo do outro */
+    gap: 15px; /* Espaçamento entre os itens da lista */
+    padding-bottom: 20px;
+}
+
+/* --- Box de Chamado (ITEM DA LISTA) --- */
+.chamado-box {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 20px 25px; /* Ajustado para um visual mais de lista */
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+    display: flex; /* Para alinhar o conteúdo interno horizontalmente */
+    align-items: center; /* Alinha verticalmente no centro */
+    justify-content: space-between; /* Espalha os itens */
+    flex-wrap: wrap; /* Permite que os itens quebrem linha em telas menores */
+    gap: 10px; /* Espaçamento interno entre os elementos do item da lista */
+}
+
+.chamado-box:hover {
+    transform: translateY(-3px); /* Efeito de elevação mais sutil para lista */
+    background-color: #f0f4f7; /* Um cinza bem leve no hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.chamado-box h4 {
+    font-size: 1.25em; /* Um pouco menor para caber na linha */
+    color: var(--primary-color);
+    font-weight: 700;
+    flex-basis: 30%; /* Ocupa cerca de 30% da largura, ajusta conforme necessário */
+    min-width: 150px; /* Garante um tamanho mínimo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0; /* Remove margem inferior padrão do h4 */
+}
+
+.chamado-box .info-group { /* Agrupa as informações de usuário e data */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Permite que este grupo cresça */
+    margin-right: 15px; /* Espaçamento entre as infos e o status */
+}
+
+.chamado-box p {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    margin: 2px 0; /* Espaçamento entre as linhas de info */
+}
+
+.chamado-box p strong {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.chamado-box .descricao-resumo { /* Para a descrição, se desejar exibi-la */
+    flex-basis: 100%; /* Ocupa a linha inteira em telas pequenas */
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 5px;
+    display: none; /* Esconde a descrição por padrão na lista compacta */
+}
+
+
+/* Nova Estilização para a Tag de Status */
+.status-tag {
+    display: inline-block;
+    padding: 7px 14px; /* Um pouco maior */
+    border-radius: 25px;
+    font-size: 0.85em; /* Ligeiramente maior */
+    font-weight: 700;
+    margin: 0; /* Remove margem superior */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    flex-shrink: 0; /* Impede que a tag encolha */
+}
+
+/* Cores dos status */
+.status-aberto { background-color: var(--status-open); color: var(--text-dark); }
+.status-em-andamento { background-color: var(--status-in-progress); color: #fff; }
+.status-concluido { background-color: var(--status-completed); color: #fff; }
+.status-pendente { background-color: var(--status-pending); color: #fff; }
+
+.chamado-box button {
+    display: none; /* Esconde o botão 'Atribuir para mim' na visualização de lista para simplificar. Se precisar, pode reativar e ajustar o layout. */
+}
+
+/* Separador (HR) */
+hr {
+    margin: 50px 0;
+    border: 0;
+    border-top: 2px dashed var(--border-color);
+    opacity: 0.7;
+}
+
+/* Mensagem de Vazio */
+.vazio {
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+    background-color: #e9ecef;
+    color: var(--secondary-color);
+    border-radius: 10px;
+    font-style: italic;
+    margin-top: 25px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: 1px dashed #ced4da;
+}
+
+/* ====================================
+    Responsividade (Aprimorada para Lista)
+    ==================================== */
+@media (max-width: 992px) { /* Tablets */
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: relative;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+        height: auto;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 1000;
+        order: 2;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar h3 {
+        display: none;
+    }
+
+    /* Hide My Details section on smaller screens if it takes too much space */
+    .my-details {
+        display: none;
+    }
+
+    .sidebar button, .sidebar a button {
+        padding: 10px;
+        font-size: 0.8em;
+        flex-grow: 1;
+        text-align: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .main-content {
+        padding: 20px 20px 80px;
+        order: 1;
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .search-filter {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .search-filter input,
+    .search-filter select {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .chamado-box { /* Ajuste para o item da lista em tablets */
+        flex-direction: column; /* Empilha os elementos do item da lista */
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .chamado-box h4 {
+        flex-basis: auto; /* Remove a base fixa */
+        width: 100%; /* Ocupa a largura total */
+        margin-bottom: 8px;
+    }
+
+    .chamado-box .info-group {
+        margin-right: 0; /* Remove margem */
+        width: 100%; /* Ocupa a largura total */
+        margin-bottom: 10px; /* Espaçamento antes do status */
+    }
+
+    .status-tag {
+        align-self: flex-end; /* Move o status para a direita se empilhado */
+    }
+    
+    .chamado-box .descricao-resumo {
+        display: block; /* Mostra a descrição resumida em telas menores */
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) { /* Smartphones */
+    .main-content {
+        padding: 15px 15px 80px;
+    }
+
+    .main-header h1 {
+        font-size: 1.8em;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+    }
+
+    .chamado-box {
+        padding: 15px;
+    }
+
+    .chamado-box h4 {
+        font-size: 1.1em;
+    }
+
+    .chamado-box p {
+        font-size: 0.85em;
+    }
+
+    .status-tag {
+        font-size: 0.75em;
+        padding: 5px 10px;
+    }
+
+    .sidebar button, .sidebar a button {
+        padding: 8px;
+        font-size: 0.75em;
+        gap: 3px;
+    }
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selecionar Tipo de Chamado - 4DeskSolutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/style_extfront.css">
+
+    <script type="module" src="../js/externo_front.js"></script>
+
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">4DeskSolutions</div>
+        <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+        <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+        <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+        <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+        <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+    </aside>
+    <div class="main">
+        <div class="topbar">
+            <h1>Selecione o tipo de chamado</h1>
+            <div class="actions">
+                <button class="signout">Sair</button> 
+                <button onclick="abrirModal()">Configurações</button> 
+            </div>
+            <div class="toggle-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="announcements">
+                <h2>📢 Announcements</h2>
+
+                <div class="announcement">
+                    <strong>[PÚBLICO ALVO: TODOS OS CLIENTES] BOTÃO "RESET MÁGICO" DISPONÍVEL – SEUS PROBLEMAS DE TI DESAPARECEM NUM CLIQUE!</strong>
+                    <p>Nosso inovador botão "Reset Mágico" acaba de ser lançado! Basta clicar e ver todos os seus pepinos tecnológicos sumirem no ar. Chega de tentativas e erros, chega de esperar – só pura e inabalável felicidade em TI.</p>
+                    <div class="date">15/05/2025 06:00 AM</div>
+                </div>
+
+                <div class="announcement">
+                    <strong>[PÚBLICO ALVO: EQUIPE INTERNA] SEXTAS-FEIRAS COM PIZZA GRÁTIS AGORA SÃO OBRIGATÓRIAS PARA MÁXIMA PRODUTIVIDADE!</strong>
+                    <p>Preparem-se, time! Com efeito imediato, as Sextas-Feiras com Pizza Grátis são obrigatórias para todos. Nossas métricas internas comprovam uma correlação direta entre pizza deliciosa e produtividade nas alturas. Não perca sua fatia de sucesso!</p>
+                    <div class="date">14/05/2025 09:00 AM</div>
+                </div>
+
+                <div class="announcement">
+                    <strong>[PÚBLICO ALVO: TODOS OS CLIENTES] ATENÇÃO: INTERNET AGORA FUNCIONA À BASE DE HAMSTERES EM RODINHAS – ESPERE ALGUNS COCHILOS!</strong>
+                    <p>Devido a circunstâncias *totalmente inesperadas*, a infraestrutura central da internet agora é movida por uma equipe altamente dedicada, embora ocasionalmente sonolenta, de hamsters. Estamos trabalhando em uma solução mais robusta, mas por favor, tenha paciência se sua conexão tirar um breve "cochilo".</p>
+                    <div class="date">15/05/2025 06:00 AM</div>
+                </div>
+
+                <div class="announcement">
+                    <strong>[PÚBLICO ALVO: EQUIPE INTERNA] NOSSO NOVO MESTRE DA IA, O "SUPERMIND 3000", ASSUMIU O CONTROLE DOS CAFÉS!</strong>
+                    <p>Saudações, especialistas de suporte! Temos o prazer de anunciar que o "Supermind 3000", nossa IA de ponta, agora está agendando meticulosamente todas as pausas para o café, a fim de maximizar a contemplação existencial. Abrace o futuro da cafeína com horários perfeitos!</p>
+                    <div class="date">14/05/2025 09:00 AM</div>
+                </div>
+            </div>
+
+            <div class="cards">
+                <div class="card" onclick="abrirChamado('rede')">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Rede</h3>
+                    <p>Conexão, internet ou servidores.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('hardware')">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Hardware</h3>
+                    <p>Impressoras, cabos, etc.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('software')">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Software</h3>
+                    <p>Programas e sistemas.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('outros')">
+                    <i class="fas fa-question"></i>
+                    <h3>Outros</h3>
+                    <p>Solicitações diversas.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('impressora')">
+                    <i class="fas fa-print"></i>
+                    <h3>Impressora</h3>
+                    <p>Falhas, tinta, conexão.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('monitor')">
+                    <i class="fas fa-tv"></i>
+                    <h3>Monitor</h3>
+                    <p>Resolução ou tela apagada.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('teclado')">
+                    <i class="fas fa-keyboard"></i>
+                    <h3>Teclado</h3>
+                    <p>Teclas ou layout.</p>
+                </div>
+                <div class="card" onclick="abrirChamado('notebook')">
+                    <i class="fas fa-laptop"></i>
+                    <h3>Notebook</h3>
+                    <p>Bateria ou desempenho.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="configModal" class="config-modal">
+        <div class="config-card">
+            <span class="close" onclick="fecharModal()">&times;</span>
+
+            <div id="mainView">
+                <div class="user-header">
+                    <div class="avatar" id="profileAvatar">S</div>
+                    <div class="user-info">
+                        <h3 id="profileName">Hi, Usuário!</h3>
+                        <p id="profileEmail">email@example.com</p>
+                        <button class="manage-btn" onclick="abrirEdicao()">Gerenciar Conta</button>
+                    </div>
+                </div>
+                <div class="footer-actions">
+                    <button class="signout">Sair</button>
+                </div>
+            </div>
+
+            <div id="editView" style="display:none;">
+                <div class="edit-header">
+                    <h3>Editar Perfil</h3>
+                </div>
+
+                <div class="edit-body">
+                    <label for="editNome">Nome:</label>
+                    <input type="text" id="editNome" value="Usuário Padrão" disabled> 
+
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" disabled>
+
+                    <label for="editFoto">Foto de Perfil:</label>
+                    <input type="file" id="editFoto" accept="image/*" onchange="atualizarPreview(event)">
+
+                    <div class="preview">
+                        <img id="previewFoto" src="" alt="Preview" style="display:none;">
+                    </div>
+                </div>
+
+                <div class="footer-actions">
+                    <button id="salvarFotoBtn" onclick="salvarFoto()">Salvar Foto</button> 
+                    <button onclick="voltar()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,541 @@
+
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(180deg, #0e0e0e 0%, #1a1a2f 100%);
+      padding: 20px;
+    }
+
+    .login-box {
+      background-color: #111;
+      padding: 40px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid #222;
+    }
+
+    .login-box h2 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 24px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid #333;
+      background: #0e0e0e;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .login-box input::placeholder {
+      color: #888;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+      transition: background 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background-color: #0070f3;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0055aa;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #0070f3;
+      color: #0070f3;
+    }
+
+    .btn-secondary:hover {
+      background-color: #0070f3;
+      color: #fff;
+    }
+  /* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* Corpo */
+body {
+  font-family: 'Helvetica Neue', sans-serif;
+  background: #0e0e0e;
+  color: #fff;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  background: linear-gradient(180deg,rgba(0, 0, 0, 1) 0%, rgba(49, 48, 112, 1) 100%);
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #aaa;
+}
+
+.hero-btn {
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: #0055aa;
+}
+
+/* Carrossel */
+.computer-frame {
+  margin: 60px auto;
+  position: relative;
+  width: 600px;
+  height: 400px;
+}
+
+.computer-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.screen {
+  position: absolute;
+  top: 12%;
+  left: 11%;
+  width: 78%;
+  height: 65%;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+}
+
+.carousel-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.carousel-img.active {
+  opacity: 1;
+}
+
+/* Bolinhas do carrossel */
+.carousel-indicators {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 5px;
+  background-color: #888;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: #0070f3;
+}
+
+/* Seções */
+/* Estilo para as features */
+.features, .pricing, .contact {
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.features {
+  background: linear-gradient(135deg, #1e1e2f 0%, #111 100%); /* Adicionando o fundo */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.feature {
+  display: flex;
+  flex-direction: row; /* Imagem ao lado do texto */
+  align-items: center;
+  text-align: center;
+  
+  opacity: 0; /* Começa invisível */
+  transform: translateY(50px); /* Começa ligeiramente abaixo */
+  transition: opacity 1s ease-out, transform 1s ease-out; /* Transição suave */
+}
+
+/* Quando o item se torna visível */
+.feature.visible {
+  opacity: 1;
+  transform: translateY(0); /* Vai para sua posição original */
+}
+
+.feature h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  color: #bbb;
+}
+
+.feature-image {
+  margin-left: 20px; /* Espaço entre o texto e a imagem */
+}
+
+.feature-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.feature-text {
+  max-width: 500px; /* Limita o tamanho do texto */
+}
+
+/* Rodapé */
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  font-size: 14px;
+  background-color: #111;
+  color: #666;
+  border-top: 1px solid #222;
+}
+
+/* Estilo da seção "Our Partners" */
+section {
+  display: grid;
+  place-items: center;
+}
+
+h1 {
+  font-size: 3rem;
+  padding: 20px;
+  margin: 20px 0px;
+}
+
+.slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 80%;
+  overflow: hidden;
+  background: rgb(0, 0, 0); /* Fundo escuro */
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5); /* Aumentando a sombra */
+  backdrop-filter: blur(7.4px);
+  -webkit-backdrop-filter: blur(7.4px);
+  border: 1px solid rgba(30, 30, 30, 0.7); /* Ajustando a borda para um tom escuro também */
+}
+
+
+.slider-items {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+  animation: scrolling 20s linear infinite;
+  width: max-content; /* Garantir que a largura da animação seja o suficiente para os itens */
+}
+
+/* Animação contínua */
+@keyframes scrolling {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-50%); /* Move metade do tamanho total dos itens */
+  }
+  100% {
+    transform: translateX(-100%); /* Move todo o tamanho dos itens */
+  }
+}
+
+
+
+.slider-items img {
+  width: 12%;
+  margin: 20px;
+}
+/* Mockup Computador + Celular */
+.mockup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px;
+  background: linear-gradient(180deg,rgba(49, 48, 112, 1) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+.mockup-container {
+  position: relative;
+  max-width: 900px;
+  width: 90%;
+}
+
+.desktop-img {
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.phone-img {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 200px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  background: rgb(22, 22, 22);
+  padding: 10px;
+}
+/* Rodapé */
+.footer {
+  background-color: #111;
+  color: #bbb;
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #222;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer p {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.social-media {
+  margin-top: 10px;
+}
+
+.social-media a {
+  margin: 0 10px;
+}
+
+.social-media img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s;
+}
+
+.social-media img:hover {
+  transform: scale(1.2);
+}
+/* Seu CSS atual para o tema escuro (Dark Theme) */
+
+/* ... (Todo o seu código CSS atual, que já define o tema escuro por padrão) ... */
+
+/* --- Estilos para o Tema Claro (Light Theme) --- */
+
+/* Body no tema claro */
+body.light-theme {
+  background: #f0f2f5; /* Fundo claro geral */
+  color: #333; /* Texto escuro */
+}
+
+/* Botões no tema claro */
+body.light-theme .header-btn,
+body.light-theme .btn-primary {
+  background-color: #0070f3; /* Cor primária permanece a mesma */
+  color: #fff;
+}
+
+body.light-theme .header-btn:hover,
+body.light-theme .btn-primary:hover {
+  background-color: #0055aa; /* Cor de hover permanece a mesma */
+}
+
+body.light-theme .btn-secondary {
+  background: transparent;
+  border: 2px solid #0070f3;
+  color: #0070f3;
+}
+
+body.light-theme .btn-secondary:hover {
+  background-color: #0070f3;
+  color: #fff;
+}
+
+/* Seções e caixas no tema claro */
+body.light-theme .login-wrapper {
+  background: linear-gradient(180deg, #f0f2f5 0%, #e0e2e5 100%); /* Gradiente claro */
+}
+
+body.light-theme .login-box {
+  background-color: #ffffff; /* Fundo da caixa de login clara */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+  border: 1px solid #ddd;
+}
+
+body.light-theme .login-box h2 {
+  color: #333; /* Título escuro */
+}
+
+body.light-theme .login-box input {
+  border: 1px solid #ccc;
+  background: #f9f9f9; /* Fundo do input claro */
+  color: #333;
+}
+
+body.light-theme .login-box input::placeholder {
+  color: #999;
+}
+
+/* Hero Section no tema claro */
+body.light-theme .hero {
+  background: linear-gradient(180deg, #e0e2e5 0%, #f0f2f5 100%); /* Gradiente claro para o hero */
+}
+
+body.light-theme .hero h1 {
+  color: #333;
+}
+
+body.light-theme .hero p {
+  color: #666;
+}
+
+/* Carrossel no tema claro */
+body.light-theme .screen {
+  background: #f9f9f9; /* Fundo da tela do carrossel claro */
+}
+
+body.light-theme .dot {
+  background-color: #bbb; /* Cor das bolinhas */
+}
+
+body.light-theme .dot.active {
+  background-color: #0070f3; /* Cor ativa permanece a mesma */
+}
+
+/* Seções de Features no tema claro */
+body.light-theme .features {
+  background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%); /* Gradiente claro */
+}
+
+body.light-theme .feature h2 {
+  color: #333;
+}
+
+body.light-theme .feature p {
+  color: #666;
+}
+
+/* Slider de Parceiros no tema claro */
+body.light-theme .slider {
+  background: #ffffff; /* Fundo do slider claro */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(220, 220, 220, 0.7);
+}
+
+/* Mockup no tema claro */
+body.light-theme .mockup {
+  background: linear-gradient(180deg, #f0f2f5 0%, #e0e2e5 100%);
+}
+
+body.light-theme .phone-img {
+  background: #ffffff; /* Fundo do celular no mockup claro */
+}
+
+/* Rodapé no tema claro */
+body.light-theme .footer {
+  background-color: #ffffff;
+  color: #666;
+  border-top: 1px solid #e0e0e0;
+}
+/* Seu CSS atual para o tema escuro (Dark Theme) */
+
+/* ... (Mantenha todo o seu código CSS atual para os outros elementos) ... */
+
+/* Estilos para o novo botão de tema */
+.theme-toggle-btn {
+  position: fixed; /* Fixa o botão na tela */
+  top: 20px; /* Distância do topo */
+  right: 20px; /* Distância da direita */
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+  padding: 10px 15px;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para destacar */
+}
+
+.theme-toggle-btn:hover {
+  background-color: #0055aa;
+}
+
+/* Estilos do botão de tema no tema claro */
+body.light-theme .theme-toggle-btn {
+  background-color: #0070f3; /* Mantém a cor primária ou pode mudar se quiser */
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra mais suave no tema claro */
+}
+
+body.light-theme .theme-toggle-btn:hover {
+  background-color: #0055aa;
+}
+
+/* REMOVA AS SEGUINTES REGRAS CSS RELACIONADAS À NAVBAR ANTIGA, SE DESEJAR: */
+/*
+.header { ... }
+.logo { ... }
+.nav { ... }
+.nav a { ... }
+.header-btn { ... } // Se não for usado em mais nenhum lugar
+*/
+
+/* REMOVA TAMBÉM AS VARIAÇÕES DESTAS REGRAS NO TEMA CLARO: */
+/*
+body.light-theme .header { ... }
+body.light-theme .nav a { ... }
+body.light-theme .header-btn { ... }
+*/

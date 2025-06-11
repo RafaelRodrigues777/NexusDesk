@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pesquisa de Satisfação - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Global Resets and Body Styling */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f1f5f9; /* Light background for the overall page */
+      color: #1e293b; /* Dark text color for general content */
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 260px;
+      background-color: #0f172a; /* Darkest blue for sidebar */
+      color: #fff; /* White text for sidebar */
+      display: flex;
+      flex-direction: column;
+      padding: 30px 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      flex-shrink: 0; /* Prevent sidebar from shrinking */
+    }
+
+    .sidebar .logo {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #38bdf8; /* Vibrant blue for logo */
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      color: #cbd5e1; /* Lighter gray for inactive links */
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+      font-weight: 500; /* Slightly bolder than normal text */
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #1e293b; /* Darker background on hover/active */
+      color: #fff; /* White text on hover/active */
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+      font-size: 16px;
+    }
+
+    /* Main Content Area */
+    .main {
+      flex: 1; /* Allows main content to fill remaining space */
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff; /* White background for main content */
+      margin: 20px; /* Margin around the main content block */
+      border-radius: 12px; /* Rounded corners for the main block */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* More pronounced shadow */
+      overflow: hidden; /* Hide any overflowing content from rounded corners */
+    }
+
+    /* Top Bar Styles */
+    .topbar {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e2e8f0; /* Light border at the bottom */
+      flex-shrink: 0; /* Prevent topbar from shrinking */
+    }
+
+    .topbar h1 {
+      font-size: 24px; /* Slightly larger heading */
+      color: #1e293b;
+      margin: 0; /* Remove default margin */
+      font-weight: 700; /* Bold title */
+    }
+
+    /* Content Area for Listings */
+    .content {
+      padding: 30px;
+      flex: 1; /* Allows content to expand and take available height */
+      overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+    }
+
+    #lista-atendimentos {
+      display: grid; /* Use grid for layout of individual service items */
+      gap: 20px; /* Space between grid items */
+    }
+
+    .atendimento {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.07); /* Enhanced shadow */
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      cursor: pointer;
+      border: 1px solid #e2e8f0; /* Subtle border */
+    }
+
+    .atendimento:hover {
+      transform: translateY(-3px); /* Slightly more pronounced lift effect */
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12); /* Increased shadow on hover */
+      background-color: #f8fafc; /* Very light background on hover */
+    }
+
+    .atendimento h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #0f172a; /* Dark text for title */
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.4;
+      white-space: nowrap; /* Prevent title from wrapping */
+      overflow: hidden; /* Hide overflow content */
+      text-overflow: ellipsis; /* Add ellipsis for overflow */
+      max-width: 100%; /* Ensure it respects parent width */
+    }
+
+    .atendimento .meta-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #64748b; /* Muted gray for meta info */
+      flex-wrap: wrap; /* Allow items to wrap on small screens */
+      gap: 8px; /* Space between wrapped items */
+    }
+
+    .atendimento .meta-info span i {
+      margin-right: 6px;
+      color: #38bdf8; /* Accent color for icons */
+    }
+
+    .atendimento .meta-info span.star-click {
+      color: #f59e0b; /* Gold-ish color for the star icon */
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .atendimento .meta-info span.star-click i {
+        color: #f59e0b; /* Ensure the star icon itself is gold */
+    }
+
+
+    /* No Data / Error Messages */
+    .no-data {
+      background-color: #e0f2f7; /* Light blue for info messages */
+      border: 1px solid #b2ebf2; /* Blue border */
+      padding: 25px;
+      border-radius: 12px;
+      color: #00796b; /* Dark teal text */
+      font-size: 1.1em;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Space between icon and text */
+      margin-top: 20px; /* Space from top bar */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      font-weight: 600;
+    }
+
+    .no-data.error-message {
+      background-color: #ffe0b2; /* Light orange for errors */
+      border: 1px solid #ffcc80; /* Orange border */
+      color: #e65100; /* Dark orange text */
+      font-weight: bold;
+    }
+    .no-data i {
+        font-size: 1.5em;
+        margin-right: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column; /* Stack sidebar and main content */
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px 20px;
+        flex-direction: row; /* Layout sidebar items horizontally */
+        flex-wrap: wrap; /* Allow items to wrap */
+        justify-content: center; /* Center items horizontally */
+        gap: 10px; /* Space between sidebar links */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+
+      .sidebar .logo {
+        margin-bottom: 15px;
+        width: 100%; /* Make logo take full width */
+        text-align: center;
+        font-size: 20px;
+      }
+
+      .sidebar a {
+        padding: 8px 15px;
+        margin-bottom: 0; /* Remove bottom margin when horizontal */
+      }
+
+      .sidebar a i {
+        margin-right: 8px;
+      }
+
+      .main {
+        margin: 10px; /* Smaller margin for main content */
+        border-radius: 8px; /* Smaller border-radius */
+      }
+
+      .topbar {
+        padding: 15px 20px;
+      }
+
+      .topbar h1 {
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .atendimento {
+        padding: 15px;
+      }
+
+      .atendimento h4 {
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .atendimento .meta-info {
+        flex-direction: column; /* Stack meta info vertically */
+        align-items: flex-start;
+      }
+
+      .no-data {
+        font-size: 1em;
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar a {
+        font-size: 0.9em;
+        padding: 6px 10px;
+      }
+      .sidebar a i {
+        margin-right: 5px;
+        font-size: 14px;
+      }
+      .topbar h1 {
+        font-size: 18px;
+      }
+      .atendimento {
+        padding: 12px;
+      }
+      .atendimento h4 {
+        font-size: 15px;
+      }
+      .atendimento .meta-info {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">4DeskSolutions</div>
+    <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+    <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+    <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a class="active" href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+    <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Últimos Atendimentos</h1>
+    </div>
+
+    <div class="content">
+      <div id="lista-atendimentos"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+      authDomain: "desksolutions-204dd.firebaseapp.com",
+      databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+      projectId: "desksolutions-204dd",
+      storageBucket: "desksolutions-204dd.appspot.com",
+      messagingSenderId: "169920163822",
+      appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const firestore = getFirestore(app);
+
+    const container = document.getElementById('lista-atendimentos');
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(firestore, "usuarios", user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const usuarioLogadoEmail = userData.email;
+            console.log("Usuário logado para PDS:", usuarioLogadoEmail);
+            carregarChamadosParaAvaliacao(usuarioLogadoEmail);
+          } else {
+            console.warn("Perfil de usuário não encontrado para UID:", user.uid);
+            alert("Seu perfil de usuário não foi encontrado. Por favor, faça login novamente.");
+            window.location.href = "login.html";
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dados do usuário:", error);
+          alert("Ocorreu um erro ao carregar seu perfil. Por favor, tente novamente.");
+          window.location.href = "login.html";
+        }
+      } else {
+        alert("Nenhum usuário logado. Redirecionando para a página de login.");
+        window.location.href = "login.html";
+      }
+    });
+
+    function carregarChamadosParaAvaliacao(emailUsuarioLogado) {
+      const chamadosRef = ref(db, 'chamados');
+      onValue(chamadosRef, (snapshot) => {
+        container.innerHTML = ''; // Clear the container before adding new items
+        let atendimentosPendentes = [];
+
+        if (snapshot.exists()) {
+          snapshot.forEach((childSnapshot) => {
+            const chamadoId = childSnapshot.key;
+            const chamadoData = childSnapshot.val();
+
+            // Filter calls: "Concluído" status, opened by the logged-in user, and not yet evaluated
+            if (chamadoData.status === "Concluído" &&
+                chamadoData.usuario === emailUsuarioLogado &&
+                !chamadoData.avaliado) {
+
+              atendimentosPendentes.push({
+                id: chamadoId,
+                numeroChamado: chamadoData.numeroChamado || chamadoId.substring(0, 6),
+                titulo: (chamadoData.descricao || 'Chamado sem descrição').slice(0, 80) + (chamadoData.descricao && chamadoData.descricao.length > 80 ? '...' : ''),
+                dataConclusao: chamadoData.dataConclusao || chamadoData.criadoEm
+              });
+            }
+          });
+        }
+
+        if (atendimentosPendentes.length === 0) {
+          container.innerHTML = `<div class="no-data"><i class="fas fa-smile-beam"></i> Ótimo! Nenhum atendimento disponível para avaliação no momento.</div>`;
+        } else {
+          // Sort by dataConclusao in descending order (most recent first)
+          atendimentosPendentes.sort((a, b) => new Date(b.dataConclusao) - new Date(a.dataConclusao));
+
+          atendimentosPendentes.forEach(atendimento => {
+            const div = document.createElement('div');
+            div.className = 'atendimento';
+            div.innerHTML = `
+              <h4>Chamado #${atendimento.numeroChamado} - ${atendimento.titulo}</h4>
+              <div class="meta-info">
+                <span><i class="fas fa-calendar-alt"></i> Concluído em: ${new Date(atendimento.dataConclusao).toLocaleDateString('pt-BR')}</span>
+                <span class="star-click"><i class="fas fa-star"></i> Clique para Avaliar</span>
+              </div>
+            `;
+            div.onclick = () => {
+              window.location.href = `../pds/avaliar.html?id=${atendimento.id}`;
+            };
+            container.appendChild(div);
+          });
+        }
+      }, (error) => {
+        console.error("Erro ao carregar chamados para avaliação:", error);
+        container.innerHTML = `<div class="no-data error-message"><i class="fas fa-exclamation-triangle"></i> Ocorreu um erro ao carregar os atendimentos. Por favor, tente novamente mais tarde.</div>`;
+      });
+    }
+  </script>
+</body>
+</html>

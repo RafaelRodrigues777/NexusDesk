@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs - 4DeskSolutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: #0f172a;
+      color: #fff;
+      padding: 30px 20px;
+      flex-shrink: 0;
+    }
+
+    .sidebar .logo {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #1e293b;
+      color: #fff;
+    }
+
+    .sidebar a i {
+      margin-right: 12px;
+      font-size: 16px;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .topbar h1 {
+      font-size: 24px;
+      color: #1e293b;
+    }
+
+    .content {
+      padding: 30px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .faq-item {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .faq-question {
+      padding: 16px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      color: #1e293b;
+      background-color: #f8fafc;
+    }
+
+    .faq-question::after {
+      content: '+';
+      position: absolute;
+      right: 24px;
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-question::after {
+      content: '-';
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      background-color: #ffffff;
+      padding: 0 24px;
+      color: #475569;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 16px 24px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 16px;
+      }
+
+      .sidebar a {
+        font-size: 14px;
+        padding: 8px;
+        margin: 0;
+      }
+
+      .main {
+        width: 100%;
+      }
+
+      .topbar {
+        padding: 16px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">4DeskSolutions</div>
+    <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+    <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+    <a href="../html/faqs.html" class="active"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+    <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>Perguntas Frequentes</h1>
+    </div>
+    <div class="content">
+      <div class="faq-item">
+        <div class="faq-question">Como posso abrir um chamado técnico?</div>
+        <div class="faq-answer">
+          Você pode abrir um chamado acessando a aba "Chamados" no nosso sistema interno e preenchendo o formulário com os detalhes do problema.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Qual o horário de atendimento?</div>
+        <div class="faq-answer">
+          Nosso atendimento funciona de segunda a sexta, das 8h às 18h (exceto feriados nacionais).
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Oferecem suporte remoto?</div>
+        <div class="faq-answer">
+          Sim! A maioria dos nossos atendimentos é feita via acesso remoto, garantindo agilidade e segurança na resolução dos chamados.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Como acompanho o status do meu chamado?</div>
+        <div class="faq-answer">
+          Após abrir um chamado, você pode acompanhar o status e atualizações diretamente pelo painel da plataforma, usando seu login.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const faqs = document.querySelectorAll('.faq-item');
+    faqs.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('active');
+        faqs.forEach(other => {
+          if (other !== item) other.classList.remove('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

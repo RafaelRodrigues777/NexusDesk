@@ -1,0 +1,187 @@
+/* Importa todos os estilos base do seu arquivo principal para técnicos */
+@import url('style_intchama2.css');
+
+/* Adicione aqui quaisquer estilos específicos ou sobrescritas para o Dashboard do Admin. */
+
+/* Sobrescreve o comportamento de lista para voltar a ser grid de cards */
+.chamado-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding-bottom: 20px;
+}
+
+/* Garante que o vazio da mensagem de vazio ocupe a coluna inteira no grid */
+.vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 30px;
+    margin-top: 25px;
+}
+
+/* Estilos para o Meu Perfil na sidebar do admin (seção copiada) */
+.my-profile {
+    /* ... estilos do meu perfil ... */
+}
+.my-profile .profile-image {
+    /* ... */
+}
+/* etc. */
+
+/* ====================================
+   NOVOS ESTILOS PARA O MODAL DE LOGIN
+   ==================================== */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fica no topo da tela, mesmo com scroll */
+    z-index: 1000; /* Fica acima de tudo */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Adiciona scroll se o conteúdo for muito grande */
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+    justify-content: center; /* Centraliza horizontalmente (com display: flex) */
+    align-items: center; /* Centraliza verticalmente (com display: flex) */
+    padding: 20px; /* Padding para evitar que o modal encoste nas bordas em telas pequenas */
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: var(--card-background); /* Branco */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%; /* Largura responsiva */
+    max-width: 400px; /* Largura máxima */
+    position: relative; /* Para posicionar o botão de fechar */
+    text-align: center;
+    animation: fadeIn 0.3s ease-out; /* Adiciona uma animação */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.modal-content p {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 0.95em;
+}
+
+.modal-content label {
+    display: block;
+    text-align: left;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.modal-content input[type="email"],
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.modal-content button[type="submit"] {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.error-message {
+    color: #dc3545; /* Vermelho para erros */
+    font-size: 0.9em;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Ajustes de responsividade para o modal */
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+    .modal-content button[type="submit"] {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}/* --- ESTILOS PARA O BOTÃO "ADICIONAR EMPRESA" NO HEADER --- */
+.add-company-btn {
+    background-color: #28a745; /* Um verde mais vibrante para "Adicionar" */
+    color: white;
+    padding: 10px 18px; /* Padding ajustado para visual mais agradável */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600; /* Levemente mais bold */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaçamento entre ícone e texto */
+    white-space: nowrap; /* Evita que o texto quebre em várias linhas */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil para destaque */
+}
+
+.add-company-btn:hover {
+    background-color: #218838; /* Escurece no hover */
+    transform: translateY(-2px); /* Efeito de "levantar" */
+}
+
+.add-company-btn i {
+    font-size: 1.1rem; /* Tamanho do ícone um pouco maior */
+}
+/* --- FIM DOS ESTILOS DO BOTÃO ADICIONAR EMPRESA --- */

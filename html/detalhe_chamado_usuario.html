@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Chamado - 4DeskSolutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+    <style>
+        /* Seus estilos CSS atuais foram movidos para cá para garantir que este seja o arquivo completo */
+        :root {
+            --background: #f9f9f9;
+            --surface: #ffffff;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text: #1f2937;
+            --subtext: #6b7280;
+            --border: #e5e7eb;
+            --radius: 12px;
+            --header-bg: #0f172a; /* Cor para o cabeçalho/sidebar */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            overflow-y: auto; 
+        }
+
+        aside.sidebar {
+            width: 260px;
+            background-color: var(--header-bg);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            transition: width 0.3s ease;
+            position: sticky; 
+            top: 0;
+            height: 100vh; 
+            overflow-y: auto; 
+        }
+
+        aside.sidebar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        aside.sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+
+        aside.sidebar nav a:hover,
+        aside.sidebar nav a.active {
+            background-color: #1e293b;
+            color: #fff;
+        }
+
+        aside.sidebar nav a i {
+            margin-right: 12px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        header {
+            background: var(--surface);
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        header h2 {
+            color: var(--text);
+            font-size: 1.8rem;
+        }
+
+        .detalhes-grid {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .detalhes-grid {
+                grid-template-columns: 1fr; /* Usuário não tem as ações do técnico, então uma coluna só */
+            }
+        }
+
+        .detalhe-box {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .detalhe-box h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detalhe-box h3 i {
+            font-size: 1.2em;
+        }
+
+        .linha-dados .campo {
+            margin-bottom: 0.8rem;
+        }
+
+        .linha-dados .label {
+            font-weight: 600;
+            color: var(--subtext);
+            display: inline-block;
+            width: 120px; 
+        }
+
+        #descricaoChamado {
+            background-color: #f6f7f9;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-style: italic;
+            color: var(--subtext);
+            line-height: 1.5;
+            min-height: 80px;
+        }
+
+        /* Seção de Histórico */
+        .historico-anexos {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .historico-anexos h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .historico-lista {
+            max-height: 400px; 
+            overflow-y: auto; 
+            padding-right: 10px; 
+        }
+
+        .historico-item {
+            border-bottom: 1px dashed var(--border);
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+        }
+
+        .historico-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .historico-item p {
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .historico-item strong {
+            color: var(--text);
+        }
+
+        .historico-item .data-hora {
+            font-size: 0.85rem;
+            color: var(--subtext);
+        }
+
+        .historico-item .anexo-preview {
+            margin-top: 10px;
+            border: 1px solid #eee;
+            padding: 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #fefefe;
+        }
+        .historico-item .anexo-preview img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 4px;
+        }
+        .historico-item .anexo-preview i {
+            font-size: 1.5rem;
+            color: var(--subtext);
+        }
+
+        .vazio {
+            text-align: center;
+            color: var(--subtext);
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        /* Seção para nova interação do USUÁRIO */
+        .adicionar-interacao {
+            background: var(--background); 
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-top: 1.5rem;
+        }
+
+        .adicionar-interacao h4 {
+            color: var(--text);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .adicionar-interacao textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--text);
+            background-color: var(--surface);
+        }
+
+        .adicionar-interacao textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .adicionar-interacao .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end; 
+        }
+
+        .adicionar-interacao button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .adicionar-interacao button:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Estilos de status para a visão do usuário */
+        .status-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem; /* Um pouco maior para o cabeçalho */
+            display: inline-block;
+        }
+        .status-aberto { background-color: #fef3c7; color: #d97706; }
+        .status-emandamento { background-color: #dbeafe; color: #1e40af; }
+        .status-resolvido, .status-fechado, .status-concluido { background-color: #d1fae5; color: #065f46; }
+        .status-cancelado { background-color: #fee2e2; color: #991b1b; }
+        .status-pendente { background-color: #ffe4e6; color: #be185d; } /* Cor para pendente */
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">4DeskSolutions</div>
+        <nav>
+            <a href="../html/externo_front.html"><i class="fas fa-house"></i> Home</a>
+            <a href="../html/noticias.html"><i class="fas fa-bullhorn"></i> Anúncios</a>
+            <a href="../html/faqs.html"><i class="fas fa-question-circle"></i> FAQ</a>
+            <a href="../html/pds1.html"><i class="fas fa-chart-bar"></i> Pesquisa de Satisfação</a>
+            <a href="../html/acompanhar.html"><i class="fas fa-ticket-alt"></i> Acompanhar Chamado</a>
+        
+        </nav>
+    </aside>
+
+    <div class="content">
+        <header>
+            <h2 id="chamadoTitulo">Detalhes do Chamado #<span id="chamadoNumeroDisplay"></span></h2>
+            <span id="statusChamadoHeader" class="status-badge"></span>
+        </header>
+
+        <div class="detalhes-grid">
+            <div class="detalhe-box">
+                <h3><i class="fas fa-info-circle"></i> Dados do Chamado</h3>
+                <div class="linha-dados">
+                    <div class="campo"><span class="label">Data de Abertura:</span> <span id="dataAbertura"></span></div>
+                    <div class="campo"><span class="label">Usuário:</span> <span id="usuarioChamado"></span></div>
+                    <div class="campo"><span class="label">Telefone:</span> <span id="telefoneChamado"></span></div>
+                    <div class="campo"><span class="label">Local:</span> <span id="localChamado"></span></div>
+                    <div class="campo"><span class="label">Categoria:</span> <span id="categoriaChamado"></span></div>
+                    <div class="campo"><span class="label">Status Atual:</span> <span id="statusChamado"></span></div>
+                    <div class="campo"><span class="label">Atribuído Para:</span> <span id="atribuidoParaChamado">Não Atribuído</span></div>
+                </div>
+                <div class="detalhe-box" style="box-shadow: none; border: 1px dashed var(--border); margin-top: 15px;">
+                    <h3>Descrição Completa</h3>
+                    <p id="descricaoChamado"></p>
+                </div>
+            </div>
+            </div>
+
+        <div class="historico-anexos">
+            <h3><i class="fas fa-history"></i> Histórico de Interações e Anexos</h3>
+            <div id="historicoLista" class="historico-lista">
+                <div class="vazio" id="historicoVazio">Nenhuma interação ou anexo ainda.</div>
+            </div>
+
+            <div class="adicionar-interacao">
+                <h4><i class="fas fa-comment-dots"></i> Adicionar Comentário</h4>
+                <textarea id="textoInteracao" rows="4" placeholder="Adicione um comentário ou detalhe adicional para o técnico."></textarea>
+                <div class="btn-group">
+                    <button id="btnAdicionarComentario"><i class="fas fa-comment-dots"></i> Enviar Comentário</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getDatabase, ref, update, serverTimestamp, push, onValue, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    // Firestore e Storage não são necessários para a funcionalidade básica de visualização e comentários
+    // import { getFirestore, doc, getDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    // import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+            authDomain: "desksolutions-204dd.firebaseapp.com",
+            databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+            projectId: "desksolutions-204dd",
+            storageBucket: "desksolutions-204dd.appspot.com",
+            messagingSenderId: "169920163822",
+            appId: "1:169920163822:web:47f6b28c136922ac85e8ff",
+            measurementId: "G-MER6JEHRSH" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        const params = new URLSearchParams(window.location.search);
+        const chamadoFirebaseKey = params.get("id"); // Obtém a chave Firebase do chamado da URL
+
+        console.log("DEBUG: Chave do Chamado na URL:", chamadoFirebaseKey);
+
+        let chamadoRef;
+        if (chamadoFirebaseKey) {
+            chamadoRef = ref(db, `chamados/${chamadoFirebaseKey}`);
+        } else {
+            alert("Erro: ID do chamado não informado na URL. Redirecionando para Meus Chamados.");
+            window.location.href = "../meus_chamados.html"; // Redireciona para a lista de chamados do usuário
+            console.error("ERRO: Chave do chamado ausente na URL.");
+            return; 
+        }
+
+        let usuarioLogadoEmail = null; 
+
+        // Referências do DOM para exibição dos detalhes
+        const chamadoNumeroDisplay = document.getElementById("chamadoNumeroDisplay");
+        const statusChamadoHeader = document.getElementById("statusChamadoHeader"); 
+        const dataAbertura = document.getElementById("dataAbertura");
+        const usuarioChamado = document.getElementById("usuarioChamado");
+        const telefoneChamado = document.getElementById("telefoneChamado");
+        const localChamado = document.getElementById("localChamado");
+        const categoriaChamado = document.getElementById("categoriaChamado");
+        const statusChamado = document.getElementById("statusChamado"); 
+        const atribuidoParaChamado = document.getElementById("atribuidoParaChamado");
+        const descricaoChamado = document.getElementById("descricaoChamado");
+        const historicoLista = document.getElementById("historicoLista");
+        const historicoVazio = document.getElementById("historicoVazio");
+        const textoInteracao = document.getElementById("textoInteracao");
+        const btnAdicionarComentario = document.getElementById("btnAdicionarComentario"); 
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                usuarioLogadoEmail = user.email; // Armazena o e-mail do usuário logado
+                console.log("DEBUG: Usuário autenticado:", usuarioLogadoEmail);
+
+                // Ouve as mudanças no chamado em tempo real
+                onValue(chamadoRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const chamado = snapshot.val();
+                        console.log("DEBUG: Dados do Chamado do Realtime DB:", chamado);
+
+                        // VERIFICAÇÃO DE PERMISSÃO: O usuário só pode ver os próprios chamados
+                        // Se o e-mail do usuário logado não for o mesmo e-mail associado ao chamado, ele não pode ver.
+                        if (chamado.usuario !== usuarioLogadoEmail) {
+                            alert("Acesso negado: Você não tem permissão para visualizar este chamado.");
+                            window.location.href = "../meus_chamados.html"; 
+                            console.error("ERRO DE PERMISSÃO: Usuário tentou acessar chamado de outro usuário.");
+                            return;
+                        }
+
+                        atualizarDadosChamadoUI(chamado);
+                        carregarHistorico(chamado.interacoes || {});
+                    } else {
+                        alert("Chamado não encontrado no banco de dados ou foi excluído.");
+                        window.location.href = "../meus_chamados.html"; 
+                        console.error("ERRO: Chamado não existe no Realtime DB:", chamadoFirebaseKey);
+                    }
+                }, (error) => {
+                    console.error("ERRO: Falha ao ouvir mudanças do chamado no Realtime DB:", error);
+                    alert("Erro ao carregar detalhes do chamado em tempo real. Verifique as regras de segurança do Realtime Database.");
+                });
+
+            } else {
+                alert("Nenhum usuário logado. Redirecionando para login.");
+                window.location.href = "../login.html";
+                console.warn("AVISO: Nenhum usuário autenticado.");
+            }
+        });
+
+        // Função para atualizar a UI com os dados do chamado
+        function atualizarDadosChamadoUI(chamado) {
+            const data = chamado.criadoEm ? new Date(chamado.criadoEm) : new Date();
+            dataAbertura.textContent = data.toLocaleDateString("pt-BR");
+            usuarioChamado.textContent = chamado.usuario || "N/A";
+            telefoneChamado.textContent = chamado.telefone || "N/A";
+            localChamado.textContent = chamado.local || "N/A";
+            categoriaChamado.textContent = chamado.categoria || "N/A";
+            descricaoChamado.textContent = chamado.descricao || "Nenhuma descrição fornecida.";
+
+            const atribuido = chamado.atribuidoPara || "Não Atribuído";
+            atribuidoParaChamado.textContent = atribuido;
+
+            // Atualiza o número do chamado (usando numeroChamado ou a chave Firebase como fallback)
+            chamadoNumeroDisplay.textContent = chamado.numeroChamado || chamadoFirebaseKey;
+
+            // Atualiza e estiliza o status
+            const currentStatus = chamado.status || "Aberto";
+            statusChamado.textContent = currentStatus;
+            
+            // Remove classes antigas e adiciona a nova para o status no cabeçalho
+            statusChamadoHeader.className = 'status-badge'; 
+            statusChamadoHeader.classList.add(`status-${currentStatus.toLowerCase().replace(/\s/g, '')}`);
+            statusChamadoHeader.textContent = currentStatus;
+        }
+
+        // Função para carregar e exibir o histórico de interações
+        function carregarHistorico(interacoesObj) {
+            historicoLista.innerHTML = '';
+            const interacoesArray = [];
+
+            for (const key in interacoesObj) {
+                if (Object.hasOwnProperty.call(interacoesObj, key)) {
+                    interacoesArray.push({ id: key, ...interacoesObj[key] });
+                }
+            }
+
+            if (interacoesArray.length === 0) {
+                historicoLista.innerHTML = `<div class="vazio" id="historicoVazio">Nenhuma interação ou anexo ainda.</div>`;
+                return;
+            }
+
+            // Ordena as interações por data e hora (mais antigas primeiro)
+            interacoesArray.sort((a, b) => {
+                const dateA = new Date(a.dataHora || a.data || 0); 
+                const dateB = new Date(b.dataHora || b.data || 0);
+                return dateA - dateB;
+            });
+
+            interacoesArray.forEach(item => {
+                const historicoItem = document.createElement('div');
+                historicoItem.classList.add('historico-item');
+
+                const dataHoraDisplay = new Date(item.dataHora || item.data).toLocaleString('pt-BR');
+                let contentHTML = '';
+                let iconClass = '';
+                // O autor da interação é o 'tecnico' registrado na interação ou 'Sistema' se não for definido
+                let autor = item.tecnico || 'Sistema'; 
+
+                if (item.tipo === 'nota') {
+                    iconClass = 'fas fa-comment-alt';
+                    contentHTML = `<p>${item.nota}</p>`;
+                } else if (item.tipo === 'anexo' && item.anexo) {
+                    iconClass = 'fas fa-paperclip';
+                    const fileName = item.anexo.nome || 'Arquivo Anexado';
+                    const fileURL = item.anexo.url;
+                    const fileType = item.anexo.tipo || '';
+
+                    if (fileType.startsWith('image/')) {
+                        contentHTML = `
+                            <p>Anexo: <a href="${fileURL}" target="_blank">${fileName}</a></p>
+                            <div class="anexo-preview"><img src="${fileURL}" alt="Preview do Anexo"></div>
+                        `;
+                    } else if (fileType === 'application/pdf') {
+                        contentHTML = `
+                            <p>Anexo: <a href="${fileURL}" target="_blank">${fileName}</a></p>
+                            <div class="anexo-preview"><i class="fas fa-file-pdf"></i> PDF Anexado</div>
+                        `;
+                    } else {
+                        contentHTML = `
+                            <p>Anexo: <a href="${fileURL}" target="_blank">${fileName}</a></p>
+                            <div class="anexo-preview"><i class="fas fa-file"></i> Arquivo Anexado</div>
+                        `;
+                    }
+                } else if (item.tipo === 'status_change') {
+                    iconClass = 'fas fa-sync-alt';
+                    contentHTML = `<p>Status alterado para: <strong>${item.newStatus}</strong></p>`;
+                    if (item.nota) contentHTML += `<p>Nota: ${item.nota}</p>`;
+                } else if (item.tipo === 'assignment_change') {
+                    iconClass = 'fas fa-user-tag';
+                    contentHTML = `<p>Chamado ${item.newAssignee === "Ninguém" ? "desatribuído" : `atribuído para: <strong>${item.newAssignee}</strong>`}</p>`;
+                }
+
+                historicoItem.innerHTML = `
+                    <p><strong><i class="${iconClass}" style="margin-right: 8px;"></i>${autor}</strong> em <span class="data-hora">${dataHoraDisplay}</span></p>
+                    ${contentHTML}
+                `;
+                historicoLista.appendChild(historicoItem);
+            });
+        }
+
+        // Event listener para adicionar um novo comentário pelo usuário
+        btnAdicionarComentario.addEventListener("click", async () => {
+            const comentario = textoInteracao.value.trim();
+            if (!comentario) {
+                alert("Por favor, digite seu comentário.");
+                return;
+            }
+
+            if (!usuarioLogadoEmail) {
+                alert("Você precisa estar logado para adicionar um comentário.");
+                return;
+            }
+
+            try {
+                const interacaoData = {
+                    tecnico: usuarioLogadoEmail, // O 'tecnico' aqui é quem está adicionando a nota/comentário
+                    dataHora: serverTimestamp(),
+                    nota: comentario,
+                    tipo: 'nota' // Definido como tipo 'nota'
+                };
+                await push(child(chamadoRef, 'interacoes'), interacaoData);
+                
+                alert("Comentário adicionado com sucesso!");
+                textoInteracao.value = ""; // Limpa a área de texto
+            } catch (error) {
+                console.error("ERRO ao adicionar comentário:", error);
+                alert("Erro ao adicionar comentário ao chamado. Verifique o console para detalhes.");
+            }
+        });
+    }); 
+</script>
+</body>
+</html>

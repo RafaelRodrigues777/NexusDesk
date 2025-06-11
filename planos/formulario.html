@@ -4,153 +4,252 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Solicitação de Serviço | 4DeskSolutions</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --dark-blue-bg: #0f172a;
+      --darker-blue-bg: #020617;
+      --primary-blue: #60a5fa;
+      --secondary-blue: #38bdf8;
+      --text-light: #e0e7ff;
+      --text-medium: #94a3b8;
+      --input-bg: #0f172a;
+      --input-border: #334155;
+      --input-focus-border: #3b82f6;
+      --button-bg: #2563eb;
+      --button-hover-bg: #1e40af;
+      --card-bg-opacity: 0.97;
+    }
+
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-      color: #e0e7ff;
+      background: linear-gradient(135deg, var(--dark-blue-bg) 0%, var(--darker-blue-bg) 100%);
+      color: var(--text-light);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 4rem 2rem;
       min-height: 100vh;
+      overflow-x: hidden; /* Evita scroll horizontal */
     }
 
     .form-wrapper {
-      max-width: 740px;
+      max-width: 780px; /* Um pouco maior */
       width: 100%;
-      background-color: rgba(15, 23, 42, 0.97);
-      padding: 2.5rem 2rem;
-      border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      background-color: rgba(var(--dark-blue-bg), var(--card-bg-opacity));
+      padding: 3rem 2.5rem; /* Mais padding */
+      border-radius: 20px; /* Bordas mais suaves */
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7); /* Sombra mais intensa */
       border: 1px solid #1e293b;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(0);
+      animation: fadeInScale 0.6s ease-out;
+    }
+
+    /* Animação de entrada do formulário */
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Detalhe superior "Header" */
+    .form-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px; /* Altura da faixa */
+      background: linear-gradient(90deg, #3b82f6, #0ea5e9, #a855f7); /* Gradiente colorido */
+      border-top-left-radius: 19px;
+      border-top-right-radius: 19px;
     }
 
     h1 {
       text-align: center;
-      color: #60a5fa;
-      margin-bottom: 0.5rem;
-      font-size: 1.75rem;
+      color: var(--primary-blue);
+      margin-bottom: 0.75rem; /* Mais espaço */
+      font-size: 2.2rem; /* Maior */
+      font-weight: 700; /* Mais negrito */
+      letter-spacing: -0.025em; /* Pequeno ajuste no espaçamento */
     }
 
     .secure-badge {
       text-align: center;
-      font-size: 0.9rem;
-      color: #38bdf8;
-      margin-bottom: 1.5rem;
+      font-size: 0.95rem; /* Levemente maior */
+      color: var(--secondary-blue);
+      margin-bottom: 2rem; /* Mais espaço */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 600;
     }
 
-    .secure-badge::before {
-      content: "🔒 ";
+    .secure-badge i {
+      color: #10b981; /* Cor para o ícone de cadeado (verde) */
     }
 
     p.sub {
       text-align: center;
-      color: #94a3b8;
-      margin-bottom: 2rem;
-      font-size: 1rem;
+      color: var(--text-medium);
+      margin-bottom: 2.5rem; /* Mais espaço */
+      font-size: 1.05rem; /* Levemente maior */
+      line-height: 1.6;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.5rem; /* Mais espaçamento entre os grupos de inputs */
     }
 
     .form-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 1.25rem; /* Mais espaçamento entre inputs na mesma linha */
       align-items: center;
     }
 
     .form-row input,
     .form-row select,
     textarea {
-      flex: 1 1 48%;
+      flex: 1 1 calc(50% - 0.625rem); /* Ajusta para levar em conta o gap */
+      min-width: 250px; /* Garante que não fiquem muito estreitos em telas médias */
     }
 
     input, textarea, select {
       width: 100%;
-      padding: 0.75rem;
-      background: #0f172a;
-      color: #e0e7ff;
-      border: 1px solid #334155;
-      border-radius: 6px;
+      padding: 0.85rem 1rem; /* Mais padding */
+      background: var(--input-bg);
+      color: var(--text-light);
+      border: 1px solid var(--input-border);
+      border-radius: 8px; /* Bordas mais arredondadas */
       font-size: 1rem;
-      transition: border 0.3s ease;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Sombra interna sutil */
     }
 
     input:focus, textarea:focus, select:focus {
-      border-color: #3b82f6;
+      border-color: var(--input-focus-border);
       outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Sombra de foco mais visível */
     }
 
     input::placeholder, textarea::placeholder {
       color: #64748b;
+      opacity: 0.8; /* Levemente mais visível */
     }
 
     textarea {
       resize: vertical;
+      min-height: 100px; /* Altura mínima para o textarea */
     }
 
     select {
       appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" width="24" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e7ff" height="24" width="24" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>'); /* Seta branca para o select */
       background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 1rem;
+      background-position: right 1rem center; /* Ajusta a posição da seta */
+      background-size: 1.2rem; /* Tamanho da seta */
+      padding-right: 2.5rem; /* Evita que o texto se sobreponha à seta */
     }
 
     label.checkbox-label {
-      flex: 1 1 48%;
+      flex: 1 1 calc(50% - 0.625rem);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem; /* Mais espaçamento */
       cursor: pointer;
-      font-size: 0.95rem;
-      color: #94a3b8;
+      font-size: 0.98rem; /* Levemente maior */
+      color: var(--text-medium);
+      user-select: none; /* Impede seleção de texto ao clicar no label */
     }
 
-    label.checkbox-label input {
-      width: auto;
+    label.checkbox-label input[type="checkbox"] {
+      width: 18px; /* Tamanho do checkbox */
+      height: 18px;
+      min-width: 18px; /* Para mobile, evitar encolhimento */
       margin: 0;
       cursor: pointer;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      appearance: none;
+      -webkit-appearance: none;
+      display: grid;
+      place-content: center;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    label.checkbox-label input[type="checkbox"]::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      transform: scale(0);
+      transition: transform 0.2s ease-in-out;
+      box-shadow: inset 1em 1em var(--primary-blue); /* Cor do "tick" */
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    label.checkbox-label input[type="checkbox"]:checked {
+      background-color: var(--primary-blue);
+      border-color: var(--primary-blue);
+    }
+
+    label.checkbox-label input[type="checkbox"]:checked::before {
+      transform: scale(1);
     }
 
     button {
-      background: #2563eb;
+      background: var(--button-bg);
       color: white;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
+      padding: 0.9rem 2rem; /* Mais padding */
+      font-size: 1.1rem; /* Maior */
+      font-weight: 700; /* Mais negrito */
       border: none;
-      border-radius: 6px;
+      border-radius: 8px; /* Bordas arredondadas */
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.5);
+      gap: 0.75rem; /* Mais espaçamento entre ícone e texto */
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); /* Sombra mais pronunciada */
+      margin-top: 1rem; /* Espaço acima do botão */
     }
 
     button:hover {
-      background: #1e40af;
+      background: var(--button-hover-bg);
+      transform: translateY(-2px); /* Efeito de "levantar" */
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6); /* Sombra maior no hover */
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.5);
     }
 
     .disclaimer {
       text-align: center;
-      font-size: 0.9rem;
-      color: #94a3b8;
-      margin-top: 1.5rem;
+      font-size: 0.85rem; /* Levemente menor */
+      color: var(--text-medium);
+      margin-top: 2rem; /* Mais espaço */
+      line-height: 1.5;
     }
 
     .terms {
       font-size: 0.9rem;
-      color: #94a3b8;
+      color: var(--text-medium);
       margin-top: 1rem;
       display: flex;
       align-items: center;
@@ -158,17 +257,88 @@
     }
 
     .terms a {
-      color: #60a5fa;
+      color: var(--primary-blue);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .terms a:hover {
       text-decoration: underline;
+      color: #3b82f6; /* Azul um pouco mais claro no hover */
     }
 
-    @media (max-width: 600px) {
+    /* Estilos para a lista de autocomplete */
+    .autocomplete-list {
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Inter', sans-serif;
+      position: absolute;
+      background-color: var(--dark-blue-bg); /* Fundo escuro */
+      border: 1px solid var(--input-border);
+      border-radius: 8px; /* Bordas arredondadas */
+      z-index: 1000;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
+      margin-top: 5px; /* Pequeno espaçamento do input */
+    }
+
+    .autocomplete-list div {
+      padding: 10px 15px; /* Mais padding */
+      cursor: pointer;
+      color: var(--text-light); /* Cor do texto claro */
+      background-color: var(--dark-blue-bg);
+      transition: background-color 0.2s ease, color 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .autocomplete-list div:hover {
+      background-color: #1e293b; /* Fundo ligeiramente mais claro no hover */
+      color: var(--secondary-blue); /* Texto azul claro no hover */
+    }
+    
+    .autocomplete-list strong {
+        color: var(--primary-blue); /* Destaca a parte digitada */
+    }
+
+    /* Botão de voltar */
+    .back-button {
+      display: inline-flex; /* Para alinhar o ícone */
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem; /* Mais espaço em cima */
+      padding: 10px 25px; /* Mais padding */
+      background-color: #334155; /* Cor mais escura para o botão */
+      color: var(--text-light);
+      text-decoration: none;
+      border-radius: 8px; /* Bordas arredondadas */
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .back-button:hover {
+      background-color: #475569; /* Levemente mais claro no hover */
+      transform: translateY(-2px);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .form-wrapper {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      p.sub {
+        font-size: 0.95rem;
+      }
+
       .form-row {
         flex-direction: column;
+        gap: 1rem;
       }
 
       .form-row input,
@@ -176,22 +346,72 @@
       textarea,
       label.checkbox-label {
         flex: 1 1 100%;
+        min-width: unset; /* Remove o min-width para mobile */
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+      }
+
+      .back-button {
+        padding: 8px 20px;
+        font-size: 0.95rem;
       }
     }
+    
+    @media (max-width: 480px) {
+        .form-wrapper {
+            padding: 1.5rem 1rem;
+        }
+        h1 {
+            font-size: 1.6rem;
+        }
+        .secure-badge {
+            font-size: 0.85rem;
+        }
+        p.sub {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        input, textarea, select {
+            padding: 0.7rem 0.9rem;
+            font-size: 0.9rem;
+        }
+        label.checkbox-label {
+            font-size: 0.9rem;
+        }
+        button {
+            padding: 0.7rem 1.2rem;
+            font-size: 0.95rem;
+        }
+        .disclaimer {
+            font-size: 0.8rem;
+        }
+        .terms {
+            font-size: 0.85rem;
+        }
+    }
+
   </style>
 </head>
 <body>
   <div class="form-wrapper">
     <h1>Solicitação de Suporte Técnico</h1>
-    <div class="secure-badge">Ambiente seguro e confidencial</div>
+    <div class="secure-badge">
+      <i class="fas fa-lock"></i> Ambiente seguro e confidencial
+    </div>
     <p class="sub">
       Preencha o formulário abaixo para receber uma proposta personalizada para sua empresa. Todas as informações são tratadas com total sigilo.
     </p>
+    <form action="https://formsubmit.co/fourdesksolutions@gmail.com" method="POST" id="formSolicitacao">
+      <input type="hidden" name="_next" value="http://34.107.176.76/planos/planos.html">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_subject" value="Nova solicitação de suporte via 4DeskSolutions">
 
-    <form action="#" method="post" id="formSolicitacao">
       <div class="form-row">
         <input type="text" name="empresa" placeholder="Nome da Empresa" required />
-        <input type="text" name="cnpj" placeholder="CNPJ (somente números)" pattern="\d{14}" title="Informe o CNPJ com 14 números" required />
+        <input type="text" name="cnpj" placeholder="CNPJ (ex: 00.000.000/0000-00)" title="Informe o CNPJ no formato 00.000.000/0000-00" required />
       </div>
       <div class="form-row">
         <input type="text" name="endereco" placeholder="Endereço (Rua, número, bairro)" required />
@@ -217,18 +437,7 @@
           <option value="telefone">Telefone</option>
           <option value="whatsapp">WhatsApp</option>
         </select>
-        <input type="time" name="horario_contato" />
-      </div>
-      <div class="form-row">
-        <label class="checkbox-label">
-          <input type="checkbox" name="servico24h" />
-          Suporte 24h
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="servicoBackup" />
-          Backup Diário
-        </label>
-      </div>
+        <input type="hidden" name="horario_contato" value="Não Aplicável"> </div>
       <textarea name="mensagem" rows="4" placeholder="Descreva suas necessidades, dúvidas ou expectativas..."></textarea>
 
       <label class="checkbox-label terms">
@@ -236,33 +445,184 @@
         Li e aceito os <a href="https://www.gov.br/pt-br/termos-de-uso" target="_blank">Termos de Uso e Política de Privacidade</a>
       </label>
 
-      <button type="submit"><span>📨</span> Enviar Solicitação</button>
+      <button type="submit">
+        <i class="fas fa-paper-plane"></i> Enviar Solicitação
+      </button>
     </form>
+
+    <a href="planos.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar para Planos
+    </a>
 
     <p class="disclaimer">Garantimos o sigilo de suas informações conforme a LGPD.</p>
   </div>
+<script>
+  // Função para aplicar máscara no CNPJ
+  function aplicarMascaraCNPJ(campo) {
+    campo.addEventListener("input", function () {
+      let v = campo.value.replace(/\D/g, "");
+      if (v.length > 14) v = v.slice(0, 14);
+      v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+      v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+      v = v.replace(/(\d{4})(\d)/, "$1-$2");
+      campo.value = v;
+    });
+  }
 
-  <script>
+  // Função para aplicar máscara no telefone
+  function aplicarMascaraTelefone(campo) {
+    campo.addEventListener("input", function () {
+      let v = campo.value.replace(/\D/g, "");
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length >= 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+      if (v.length > 9) v = v.replace(/(\d{5})(\d{4})/, "$1-$2");
+      else if (v.length > 8) v = v.replace(/(\d{4})(\d{4})/, "$1-$2");
+      campo.value = v;
+    });
+  }
+
+  // Função para implementar o autocompletar de cidades
+  function autocompleteCidade(input, cidades) {
+    let currentFocus;
+
+    input.addEventListener("input", function() {
+      const val = this.value;
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+
+      const a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-list");
+      this.parentNode.appendChild(a);
+
+      const filteredCities = cidades.filter(cidade =>
+        typeof cidade === 'string' && cidade.toLowerCase().startsWith(val.toLowerCase())
+      );
+
+      filteredCities.forEach(cidade => {
+        const b = document.createElement("DIV");
+        b.innerHTML = "<strong>" + cidade.substr(0, val.length) + "</strong>";
+        b.innerHTML += cidade.substr(val.length);
+        b.innerHTML += "<input type='hidden' value='" + cidade + "'>";
+        b.addEventListener("click", function(e) {
+            input.value = this.getElementsByTagName("input")[0].value;
+            closeAllLists();
+        });
+        a.appendChild(b);
+      });
+    });
+
+    input.addEventListener("keydown", function(e) {
+      let x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) { // Seta para baixo
+        currentFocus++;
+        addActive(x);
+      } else if (e.keyCode == 38) { // Seta para cima
+        currentFocus--;
+        addActive(x);
+      } else if (e.keyCode == 13) { // Enter
+        e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
+        }
+      }
+    });
+
+    function addActive(x) {
+      if (!x) return false;
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(x) {
+      for (let i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+
+    function closeAllLists(elmnt) {
+      const x = document.getElementsByClassName("autocomplete-list");
+      for (let i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != input) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const cnpjInput = document.querySelector('input[name="cnpj"]');
+    const telInput = document.querySelector('input[name="telefone"]');
+    const cidadeInput = document.querySelector('input[name="cidade"]');
+
+    aplicarMascaraCNPJ(cnpjInput);
+    aplicarMascaraTelefone(telInput);
+
+    let listaCidades = []; // Variável para armazenar as cidades carregadas
+
+    // Carregar as cidades do arquivo JSON
+    fetch('Cidades.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Filtrar nomes válidos e armazenar
+        listaCidades = data
+          .map(item => item.Nome)
+          .filter(nome => typeof nome === 'string' && nome.trim() !== '');
+
+        autocompleteCidade(cidadeInput, listaCidades);
+
+        // Validação no envio
+        document.getElementById("formSolicitacao").addEventListener("submit", function (event) {
+          const cnpj = this.cnpj.value.replace(/\D/g, '');
+          if (cnpj.length !== 14) {
+            alert('Por favor, informe um CNPJ válido com 14 números.');
+            event.preventDefault();
+            return;
+          }
+
+          const telefone = this.telefone.value.trim();
+          // Padrão mais flexível para telefone, considerando os formatos gerados pela máscara
+          const telefonePattern = /^\(\d{2}\)\s?\d{4,5}-\d{4}$/; 
+          if (!telefonePattern.test(telefone)) {
+            alert('Por favor, informe um telefone válido no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.');
+            event.preventDefault();
+            return;
+          }
+
+          const cidade = this.cidade.value.trim();
+          if (!listaCidades.includes(cidade)) { // Verifica se a cidade está na lista carregada
+            alert('Por favor, selecione uma cidade válida da lista.');
+            event.preventDefault();
+            return;
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Erro ao carregar as cidades:', error);
+        alert('Erro ao carregar a lista de cidades. Por favor, tente novamente mais tarde.');
+      });
+
+    // Preencher plano se vier na URL
     const params = new URLSearchParams(window.location.search);
     const plano = params.get("plano");
     if (plano) {
       document.getElementById("plano").value = plano;
     }
-
-    document.getElementById("formSolicitacao").addEventListener("submit", function (event) {
-      const cnpj = this.cnpj.value.replace(/\D/g, '');
-      if (cnpj.length !== 14) {
-        alert('Por favor, informe um CNPJ válido com 14 números.');
-        event.preventDefault();
-      }
-
-      const telefone = this.telefone.value.trim();
-      const telefonePattern = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
-      if (!telefonePattern.test(telefone)) {
-        alert('Por favor, informe um telefone válido no formato (11) 91234-5678.');
-        event.preventDefault();
-      }
-    });
-  </script>
+  });
+</script>
 </body>
 </html>

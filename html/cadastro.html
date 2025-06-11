@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gerenciar Usuários - 4DeskSolutions</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h2, h3 {
+      text-align: left;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .form-box {
+      background-color: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+      border-left: 4px solid #0ea5e9;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 4px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #0284c7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-top: 40px;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    th {
+      background-color: #0ea5e9;
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #f9fafb;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>👤 Gerenciar Usuários</h2>
+
+    <div class="form-box">
+      <form id="formCadastro">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" required />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" required />
+
+        <label for="empresa">Empresa Associada</label>
+        <input type="text" id="empresa" required />
+
+        <label for="tipo">Tipo de Usuário</label>
+        <select id="tipo" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="cliente">Cliente</option>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">Cadastrar Usuário</button>
+      </form>
+    </div>
+
+    <div class="form-box">
+      <h3>📁 Cadastro em Massa</h3>
+      <label for="tipoMassa">Tipo de Usuário</label>
+      <select id="tipoMassa" required>
+        <option value="" disabled selected>Selecione</option>
+        <option value="cliente">Cliente</option>
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select>
+      <input type="file" id="excelFile" accept=".xlsx" />
+      <button onclick="cadastrarMassa()">Enviar em Massa</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Tipo</th>
+          <th>Empresa</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaUsuarios"></tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+    import * as XLSX from "https://cdn.sheetjs.com/xlsx-0.20.0/package/xlsx.mjs";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyDswRLlrpFGieUPCQyTpsTkN8kWZmyIje8",
+                authDomain: "desksolutions-204dd.firebaseapp.com",
+                databaseURL: "https://desksolutions-204dd-default-rtdb.firebaseio.com",
+                projectId: "desksolutions-204dd",
+                storageBucket: "desksolutions-204dd.appspot.com",
+                messagingSenderId: "169920163822",
+                appId: "1:169920163822:web:47f6b28c136922ac85e8ff"
+            };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const firestore = getFirestore(app);
+
+    const form = document.getElementById("formCadastro");
+    const tbody = document.getElementById("tabelaUsuarios");
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+      const empresa = document.getElementById("empresa").value.trim();
+      const tipo = document.getElementById("tipo").value;
+
+      if (!nome || !email || !senha || !tipo || !empresa) {
+        Swal.fire("Erro", "Preencha todos os campos!", "error");
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+        const uid = userCredential.user.uid;
+
+        await setDoc(doc(firestore, "usuarios", uid), {
+          nome,
+          email,
+          tipo,
+          empresaAssociada: empresa,
+          ativo: true
+        });
+
+        Swal.fire("Sucesso", "Usuário cadastrado com sucesso!", "success");
+        form.reset();
+        carregarUsuarios();
+      } catch (error) {
+        Swal.fire("Erro ao cadastrar", error.message, "error");
+      }
+    });
+
+    async function carregarUsuarios() {
+      tbody.innerHTML = "";
+      try {
+        const snapshot = await getDocs(collection(firestore, "usuarios"));
+        if (!snapshot.empty) {
+          snapshot.forEach(docUser => {
+            const u = docUser.data();
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${u.nome || 'Sem nome'}</td>
+              <td>${u.email || 'Sem email'}</td>
+              <td>${u.tipo || 'Sem tipo'}</td>
+              <td>${u.empresaAssociada || 'Sem empresa'}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = "<tr><td colspan='4'>Nenhum usuário encontrado.</td></tr>";
+        }
+      } catch (error) {
+        Swal.fire("Erro", "Falha ao buscar usuários.", "error");
+        console.error(error);
+      }
+    }
+
+    async function cadastrarMassa() {
+      const tipo = document.getElementById("tipoMassa").value;
+      const file = document.getElementById("excelFile").files[0];
+
+      if (!tipo || !file) {
+        Swal.fire("Erro", "Selecione um tipo e um arquivo.", "error");
+        return;
+      }
+
+      try {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data);
+        const planilha = workbook.Sheets[workbook.SheetNames[0]];
+        const usuarios = XLSX.utils.sheet_to_json(planilha);
+
+        const promises = usuarios.map(async user => {
+          const nome = user.Nome;
+          const email = user.Email;
+          const senha = (user.Senha || '').toString().replace(/,$/, '');
+          const empresa = user.Empresa || 'Não informado';
+
+          const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+          const uid = userCredential.user.uid;
+
+          await setDoc(doc(firestore, "usuarios", uid), {
+            nome,
+            email,
+            tipo,
+            empresaAssociada: empresa,
+            ativo: true
+          });
+        });
+
+        await Promise.all(promises);
+        Swal.fire("Sucesso", "Todos os usuários foram cadastrados!", "success");
+        carregarUsuarios();
+      } catch (error) {
+        Swal.fire("Erro", error.message, "error");
+      }
+    }
+
+    carregarUsuarios();
+  </script>
+</body>
+</html>

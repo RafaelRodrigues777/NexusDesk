@@ -30,7 +30,6 @@ O projeto utiliza tecnologias nativas como **HTML, CSS, JavaScript e PHP**, e se
 - HTML5
 - CSS3
 - JavaScript Puro (ES6)
-- PHP
 - Firebase Realtime Database
 - Firebase Authentication
 - SweetAlert2
